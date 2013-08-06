@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Origami Diagram Finder</string>
+    <string name="app_name">Origami Finder</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="modelLabel">Model Name:</string>
+    <string name="title_activity_maintain_model">Maintain Models</string>
+    <string name="title_activity_main_menu">Main Menu</string>
+    <string name="title_activity_find_models">Find Models</string>
+    <string name="title_activity_find_books">Find Books</string>
+    <string name="title_activity_query_model_list">Query Model List</string>
+    <string name="title_activity_query_book_list">Query Book List</string>
+    <string name="title_activity_query_author_list">Query Author List</string>
+    <string name="title_activity_add_model">Add/Edit Model</string>
+    <string name="title_activity_add_book">Add/Edit Book</string>
+    <string name="title_activity_add_author">Add/Edit Author</string>
 
 </resources>
