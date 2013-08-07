@@ -21,6 +21,8 @@ public class Model implements Comparable<Model> {
 	public String difficulty;
 
 	public Model() {
+		super();
+
 		id = 0L;
 
 		name = "";
@@ -34,6 +36,24 @@ public class Model implements Comparable<Model> {
 		glue = "";
 		cuts = "";
 		difficulty = "Not Rated";
+	}
+
+	public Model(String allData) {
+		this();
+
+		String[] data = allData.split("~");
+
+		id = Long.parseLong(data[0]);
+		name = data[1];
+		modelType = data[2];
+		difficulty = data[3];
+		creator = data[4];
+		bookTitle = data[5];
+		ISBN = data[6];
+		page = data[7];
+		pieces = data[8];
+		glue = data[9];
+		cuts = data[10];
 	}
 
 	@Override
