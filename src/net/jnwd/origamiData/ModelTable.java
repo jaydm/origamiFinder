@@ -9,8 +9,10 @@ import net.jnwd.origamiFinder.R;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 public class ModelTable {
@@ -27,6 +29,20 @@ public class ModelTable {
 	public static final String COL_PIECES = "PIECES";
 	public static final String COL_GLUE = "GLUE";
 	public static final String COL_CUTS = "CUTS";
+
+	public static final String[] allColumns = {
+		"MODELNAME",
+		"MODELTYPE",
+		"CREATOR",
+		"BOOKTITLE",
+		"ISBN",
+		"ONPAGE",
+		"DIFFICULTY",
+		"PAPER",
+		"PIECES",
+		"GLUE",
+		"CUTS"
+	};
 
 	private static final String DATABASE_NAME = "MODELS";
 	private static final String FTS_VIRTUAL_TABLE = "FTS";
@@ -136,5 +152,33 @@ public class ModelTable {
 
 			return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
 		}
+	}
+
+	private Cursor getModelMatches(String query, String[] columns) {
+		String selection = COL_MODEL_NAME + " MATCH ?";
+
+		String[] selectionArgs = new String[] {
+												query + "*"
+		};
+
+		return query(selection, selectionArgs, columns);
+	}
+
+	private Cursor query(String selection, String[] selectionArgs, String[] columns) {
+		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+
+		builder.setTables(FTS_VIRTUAL_TABLE);
+
+		Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
+
+		if (cursor == null) {
+			return null;
+		} else if (! cursor.moveToFirst()) {
+			cursor.close();
+
+			return null;
+		}
+
+		return cursor;
 	}
 }

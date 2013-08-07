@@ -7,9 +7,9 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
-	
-	<uses-permission android:name="android.permission.INTERNET" />
-    
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -27,6 +27,13 @@
         <activity
             android:name="net.jnwd.origamiFinder.QueryModelList"
             android:label="@string/title_activity_query_model_list" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name="net.jnwd.origamiFinder.QueryBookList"
@@ -47,6 +54,17 @@
         <activity
             android:name="net.jnwd.origamiFinder.AddEditAuthor"
             android:label="@string/title_activity_add_author" >
+        </activity>
+        <activity
+            android:name="net.jnwd.origamiFinder.SearchableActivity"
+            android:label="@string/title_activity_searchable" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
     </application>
 

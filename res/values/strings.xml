@@ -19,5 +19,7 @@
     <string name="title_activity_add_book">Add/Edit Book</string>
     <string name="title_activity_add_author">Add/Edit Author</string>
     <string name="btnDoQueryLabel">Execute Query</string>
+    <string name="search_hint">Enter a fragment to search for</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
 
 </resources>
