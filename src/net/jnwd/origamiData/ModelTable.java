@@ -164,6 +164,36 @@ public class ModelTable {
 		return query(selection, selectionArgs, columns);
 	}
 
+	public Cursor getBookTitleMatches(String query, String[] columns) {
+		String selection = COL_BOOK_TITLE + " MATCH ?";
+
+		String[] selectionArgs = new String[] {
+												query + "*"
+		};
+
+		return query(selection, selectionArgs, columns);
+	}
+
+	public Cursor getBookISBNMatches(String query, String[] columns) {
+		String selection = COL_ISBN + " MATCH ?";
+
+		String[] selectionArgs = new String[] {
+												query + "*"
+		};
+
+		return query(selection, selectionArgs, columns);
+	}
+
+	public Cursor getCreatorMatches(String query, String[] columns) {
+		String selection = COL_CREATOR + " MATCH ?";
+
+		String[] selectionArgs = new String[] {
+												query + "*"
+		};
+
+		return query(selection, selectionArgs, columns);
+	}
+
 	private Cursor query(String selection, String[] selectionArgs, String[] columns) {
 		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
