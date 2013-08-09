@@ -21,5 +21,6 @@
     <string name="btnDoQueryLabel">Execute Query</string>
     <string name="search_hint">Enter a fragment to search for</string>
     <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="title_activity_query_models_by_name">Query Models By Name</string>
 
 </resources>

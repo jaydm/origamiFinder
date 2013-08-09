@@ -1,6 +1,7 @@
 package net.jnwd.origamiFinder;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -16,20 +17,8 @@ public class MainMenu extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_main_menu);
 
 		final Button queryModelButton = (Button) findViewById(R.id.btnFindModels);
-		final Button queryBookButton = (Button) findViewById(R.id.btnFindBooks);
-		final Button queryAuthorButton = (Button) findViewById(R.id.btnFindAuthors);
-
-		final Button addModelButton = (Button) findViewById(R.id.btnAddModel);
-		final Button addBookButton = (Button) findViewById(R.id.btnAddBook);
-		final Button addAuthorButton = (Button) findViewById(R.id.btnAddAuthor);
 
 		queryModelButton.setOnClickListener(this);
-		queryBookButton.setOnClickListener(this);
-		queryAuthorButton.setOnClickListener(this);
-
-		addModelButton.setOnClickListener(this);
-		addBookButton.setOnClickListener(this);
-		addAuthorButton.setOnClickListener(this);
 	}
 
 	@Override
@@ -38,7 +27,7 @@ public class MainMenu extends Activity implements OnClickListener {
 
 		switch (clickedButton.getId()) {
 		case R.id.btnFindModels:
-			// startActivity(new Intent(this, QueryModelList.class));
+			startActivity(new Intent(this, QueryModelsByName.class));
 
 			break;
 		case R.id.btnFindBooks:
