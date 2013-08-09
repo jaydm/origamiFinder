@@ -24,48 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="net.jnwd.origamiFinder.QueryModelList"
-            android:label="@string/title_activity_query_model_list" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-        <activity
-            android:name="net.jnwd.origamiFinder.QueryBookList"
-            android:label="@string/title_activity_query_book_list" >
-        </activity>
-        <activity
-            android:name="net.jnwd.origamiFinder.QueryAuthorList"
-            android:label="@string/title_activity_query_author_list" >
-        </activity>
-        <activity
-            android:name="net.jnwd.origamiFinder.AddEditModel"
-            android:label="@string/title_activity_add_model" >
-        </activity>
-        <activity
-            android:name="net.jnwd.origamiFinder.AddEditBook"
-            android:label="@string/title_activity_add_book" >
-        </activity>
-        <activity
-            android:name="net.jnwd.origamiFinder.AddEditAuthor"
-            android:label="@string/title_activity_add_author" >
-        </activity>
-        <activity
-            android:name="net.jnwd.origamiFinder.SearchableActivity"
-            android:label="@string/title_activity_searchable" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
     </application>
 
 </manifest>

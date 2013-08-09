@@ -1,7 +1,6 @@
 package net.jnwd.origamiFinder;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -39,32 +38,32 @@ public class MainMenu extends Activity implements OnClickListener {
 
 		switch (clickedButton.getId()) {
 		case R.id.btnFindModels:
-			startActivity(new Intent(this, QueryModelList.class));
+			// startActivity(new Intent(this, QueryModelList.class));
 
 			break;
 		case R.id.btnFindBooks:
-			startActivity(new Intent(this, QueryBookList.class));
+			// startActivity(new Intent(this, QueryBookList.class));
 
 			break;
 		case R.id.btnFindAuthors:
-			startActivity(new Intent(this, QueryAuthorList.class));
+			// startActivity(new Intent(this, QueryAuthorList.class));
 
 			break;
 		case R.id.btnAddModel:
-			startActivity(new Intent(this, AddEditModel.class));
+			// startActivity(new Intent(this, AddEditModel.class));
 
 			break;
 		case R.id.btnAddBook:
-			startActivity(new Intent(this, AddEditBook.class));
+			// startActivity(new Intent(this, AddEditBook.class));
 
 			break;
 		case R.id.btnAddAuthor:
-			startActivity(new Intent(this, AddEditAuthor.class));
+			// startActivity(new Intent(this, AddEditAuthor.class));
 
 			break;
 		default:
 			// by default...search models
-			startActivity(new Intent(this, QueryModelList.class));
+			// startActivity(new Intent(this, QueryModelList.class));
 
 			break;
 		}
@@ -75,7 +74,7 @@ public class MainMenu extends Activity implements OnClickListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_menu, menu);
-		
+
 		return true;
 	}
 

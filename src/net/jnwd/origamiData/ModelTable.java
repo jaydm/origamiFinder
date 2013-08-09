@@ -154,7 +154,7 @@ public class ModelTable {
 		}
 	}
 
-	private Cursor getModelMatches(String query, String[] columns) {
+	public Cursor getModelMatches(String query, String[] columns) {
 		String selection = COL_MODEL_NAME + " MATCH ?";
 
 		String[] selectionArgs = new String[] {
