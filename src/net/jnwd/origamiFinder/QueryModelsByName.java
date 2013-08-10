@@ -53,19 +53,7 @@ public class QueryModelsByName extends Activity {
 
 		String resultText = "";
 
-		String singleResult = "" +
-			"Model[0]: " + matchingModels.getString(0) + "\n" +
-			"Model[1]: " + matchingModels.getString(1) + "\n" +
-			"Model[2]: " + matchingModels.getString(2) + "\n" +
-			"Model[3]: " + matchingModels.getString(3) + "\n" +
-			"Model[4]: " + matchingModels.getString(4) + "\n" +
-			"Model[5]: " + matchingModels.getString(5) + "\n" +
-			"Model[6]: " + matchingModels.getString(6) + "\n" +
-			"Model[7]: " + matchingModels.getString(7) + "\n";
-
-		Log.i(TAG, singleResult);
-
-		resultText += singleResult;
+		String singleResult;
 
 		while (matchingModels.moveToNext()) {
 			singleResult = "" +
