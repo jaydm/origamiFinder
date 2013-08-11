@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class QueryModelsByName extends Activity {
 	private static final String TAG = "ModelByName";
 
-	ModelTable oData;
+	private ModelTable oData;
+	private SimpleCursorAdapter dataAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
