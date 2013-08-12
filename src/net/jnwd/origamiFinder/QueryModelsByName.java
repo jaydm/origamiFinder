@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -38,42 +39,33 @@ public class QueryModelsByName extends Activity {
 
 	public void queryModelsByName() {
 		TextView modelName = (TextView) findViewById(R.id.txtQueryModelName);
-		TextView modelResults = (TextView) findViewById(R.id.txtModelResults);
 
 		String modelNameToSearch = modelName.getText().toString();
 
 		Log.i(TAG, "Searching for model name: " + modelNameToSearch);
-		Log.i(TAG, "Clearing results box...");
-
-		modelResults.setText("");
 
 		Log.i(TAG, "About to do the query...");
 
 		Cursor matchingModels = oData.getModelMatches(modelName.getText().toString(), ModelTable.allColumns);
 
+		int[] to = {
+			R.id.lstModelName,
+			R.id.lstModelType,
+			R.id.lstCreatorName
+		};
+
 		Log.i(TAG, "Resultset: " + matchingModels.getCount() + " rows");
 
-		String resultText = "";
+		dataAdapter = new SimpleCursorAdapter(
+			this, R.layout.model_info,
+			matchingModels,
+			ModelTable.allColumns,
+			to,
+			0);
 
-		String singleResult;
+		ListView listView = (ListView) findViewById(R.id.listView1);
 
-		while (matchingModels.moveToNext()) {
-			singleResult = "" +
-				"Model[0]: " + matchingModels.getString(0) + "\n" +
-				"Model[1]: " + matchingModels.getString(1) + "\n" +
-				"Model[2]: " + matchingModels.getString(2) + "\n" +
-				"Model[3]: " + matchingModels.getString(3) + "\n" +
-				"Model[4]: " + matchingModels.getString(4) + "\n" +
-				"Model[5]: " + matchingModels.getString(5) + "\n" +
-				"Model[6]: " + matchingModels.getString(6) + "\n" +
-				"Model[7]: " + matchingModels.getString(7) + "\n";
-
-			Log.i(TAG, singleResult);
-
-			resultText += singleResult;
-		}
-
-		modelResults.setText(resultText);
+		listView.setAdapter(dataAdapter);
 
 		matchingModels.close();
 	}

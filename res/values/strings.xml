@@ -22,5 +22,7 @@
     <string name="search_hint">Enter a fragment to search for</string>
     <string name="title_activity_searchable">SearchableActivity</string>
     <string name="title_activity_query_models_by_name">Query Models By Name</string>
+    <string name="some_text">Some North American Countries!</string>
+    <string name="some_hint">Type here to filter&#8230;</string>
 
 </resources>

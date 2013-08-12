@@ -31,17 +31,23 @@ public class ModelTable {
 	public static final String COL_CUTS = "CUTS";
 
 	public static final String[] allColumns = {
-		"MODELNAME",
-		"MODELTYPE",
-		"CREATOR",
-		"BOOKTITLE",
-		"ISBN",
-		"ONPAGE",
-		"DIFFICULTY",
-		"PAPER",
-		"PIECES",
-		"GLUE",
-		"CUTS"
+		COL_MODEL_NAME,
+		COL_MODEL_TYPE,
+		COL_CREATOR,
+		COL_BOOK_TITLE,
+		COL_ISBN,
+		COL_ON_PAGE,
+		COL_DIFFICULTY,
+		COL_PAPER,
+		COL_PIECES,
+		COL_GLUE,
+		COL_CUTS
+	};
+
+	public static final String[] listColumns = {
+		COL_MODEL_NAME,
+		COL_MODEL_TYPE,
+		COL_CREATOR
 	};
 
 	private static final String DATABASE_NAME = "MODELS";
