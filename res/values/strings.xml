@@ -24,5 +24,14 @@
     <string name="title_activity_query_models_by_name">Query Models By Name</string>
     <string name="some_text">Some North American Countries!</string>
     <string name="some_hint">Type here to filter&#8230;</string>
+    <string name="info_model_name">Model Name:</string>
+    <string name="info_model_creator">Creator:</string>
+    <string name="info_book_title">Book Title:</string>
+    <string name="info_model_type">Model Type:</string>
+    <string name="info_model_difficulty">Difficulty:</string>
+    <string name="info_model_paper">Paper:</string>
+    <string name="info_model_paper_pieces">Pieces:</string>
+    <string name="info_glue">Glue:</string>
+    <string name="info_cuts">Cuts:</string>
 
 </resources>

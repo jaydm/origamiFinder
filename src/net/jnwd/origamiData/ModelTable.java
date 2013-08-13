@@ -10,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -17,47 +18,116 @@ import android.util.Log;
 
 public class ModelTable {
 	private static final String TAG = "ModelDatabase";
-
-	public static final String COL_MODEL_NAME = "MODELNAME";
-	public static final String COL_MODEL_TYPE = "MODELTYPE";
-	public static final String COL_CREATOR = "CREATOR";
-	public static final String COL_BOOK_TITLE = "BOOKTITLE";
-	public static final String COL_ISBN = "ISBN";
-	public static final String COL_ON_PAGE = "ONPAGE";
-	public static final String COL_DIFFICULTY = "DIFFICULTY";
-	public static final String COL_PAPER = "PAPER";
-	public static final String COL_PIECES = "PIECES";
-	public static final String COL_GLUE = "GLUE";
-	public static final String COL_CUTS = "CUTS";
+	private static final String KEY_ROWID = "_id";
 
 	public static final String[] allColumns = {
-		COL_MODEL_NAME,
-		COL_MODEL_TYPE,
-		COL_CREATOR,
-		COL_BOOK_TITLE,
-		COL_ISBN,
-		COL_ON_PAGE,
-		COL_DIFFICULTY,
-		COL_PAPER,
-		COL_PIECES,
-		COL_GLUE,
-		COL_CUTS
+		KEY_ROWID,
+		Model.COL_MODEL_NAME,
+		Model.COL_MODEL_TYPE,
+		Model.COL_CREATOR,
+		Model.COL_BOOK_TITLE,
+		Model.COL_ISBN,
+		Model.COL_ON_PAGE,
+		Model.COL_DIFFICULTY,
+		Model.COL_PAPER,
+		Model.COL_PIECES,
+		Model.COL_GLUE,
+		Model.COL_CUTS
 	};
 
 	public static final String[] listColumns = {
-		COL_MODEL_NAME,
-		COL_MODEL_TYPE,
-		COL_CREATOR
+		Model.COL_MODEL_NAME,
+		Model.COL_CREATOR,
+		Model.COL_BOOK_TITLE,
+		Model.COL_ISBN,
+		Model.COL_ON_PAGE,
+		Model.COL_MODEL_TYPE,
+		Model.COL_DIFFICULTY,
+		Model.COL_PAPER,
+		Model.COL_PIECES,
+		Model.COL_GLUE,
+		Model.COL_CUTS
 	};
 
 	private static final String DATABASE_NAME = "MODELS";
 	private static final String FTS_VIRTUAL_TABLE = "FTS";
 	private static final int DATABASE_VERSION = 1;
 
-	private final DatabaseOpenHelper mDatabaseOpenHelper;
+	private final Context mContext;
+
+	private DatabaseOpenHelper mDatabaseOpenHelper;
+	private SQLiteDatabase mDb;
 
 	public ModelTable(Context context) {
-		mDatabaseOpenHelper = new DatabaseOpenHelper(context);
+		mContext = context;
+	}
+
+	public ModelTable open() throws SQLException {
+		mDatabaseOpenHelper = new DatabaseOpenHelper(mContext);
+
+		mDb = mDatabaseOpenHelper.getWritableDatabase();
+
+		return this;
+	}
+
+	public void close() {
+		if (mDatabaseOpenHelper != null) {
+			mDatabaseOpenHelper.close();
+		}
+	}
+
+	public void emptyDatabase() {
+		Log.i(TAG, "About to pass the empty message along...");
+
+		mDatabaseOpenHelper.emptyDatabase();
+	}
+
+	public void loadDatabase() {
+		Log.i(TAG, "About to pass the load message along...");
+
+		mDatabaseOpenHelper.loadDatabase();
+	}
+
+	public Cursor fetchAllModels() {
+		Cursor mCursor = mDb.query(FTS_VIRTUAL_TABLE, listColumns, null, null, null, null, null);
+
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+
+		return mCursor;
+	}
+
+	public Cursor getModelMatches(String query) {
+		return getModelMatches(query, listColumns);
+	}
+
+	public Cursor getModelMatches(String query, String[] columns) {
+		String selection = Model.COL_MODEL_NAME + " MATCH ?";
+
+		String[] selectionArgs = new String[] {
+												query + "*"
+		};
+
+		return query(selection, selectionArgs, columns);
+	}
+
+	private Cursor query(String selection, String[] selectionArgs, String[] columns) {
+		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+
+		builder.setTables(FTS_VIRTUAL_TABLE);
+
+		Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
+
+		if (cursor == null) {
+			return null;
+		} else if (! cursor.moveToFirst()) {
+			cursor.close();
+
+			return null;
+		}
+
+		return cursor;
 	}
 
 	private static class DatabaseOpenHelper extends SQLiteOpenHelper {
@@ -67,17 +137,18 @@ public class ModelTable {
 		private static final String FTS_TABLE_CREATE = "" +
 			"CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE + " " +
 			"USING fts3 (" +
-			COL_MODEL_NAME + ", " +
-			COL_MODEL_TYPE + ", " +
-			COL_CREATOR + ", " +
-			COL_BOOK_TITLE + ", " +
-			COL_ISBN + ", " +
-			COL_ON_PAGE + ", " +
-			COL_DIFFICULTY + ", " +
-			COL_PAPER + ", " +
-			COL_PIECES + ", " +
-			COL_GLUE + ", " +
-			COL_CUTS + ")";
+			KEY_ROWID + ", " +
+			Model.COL_MODEL_NAME + ", " +
+			Model.COL_MODEL_TYPE + ", " +
+			Model.COL_CREATOR + ", " +
+			Model.COL_BOOK_TITLE + ", " +
+			Model.COL_ISBN + ", " +
+			Model.COL_ON_PAGE + ", " +
+			Model.COL_DIFFICULTY + ", " +
+			Model.COL_PAPER + ", " +
+			Model.COL_PIECES + ", " +
+			Model.COL_GLUE + ", " +
+			Model.COL_CUTS + ")";
 
 		DatabaseOpenHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -87,11 +158,11 @@ public class ModelTable {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.i(TAG, "About to perform the onCreate method...");
+
 			mDatabase = db;
 
 			mDatabase.execSQL(FTS_TABLE_CREATE);
-
-			loadDatabase();
 		}
 
 		@Override
@@ -103,7 +174,17 @@ public class ModelTable {
 			onCreate(db);
 		}
 
-		private void loadDatabase() {
+		public void emptyDatabase() {
+			Log.i(TAG, "About to empty the database...Is the variable null?");
+
+			Log.i(TAG, "mDatabase is: " + (mDatabase == null ? "Null" : "Not null"));
+
+			mDatabase.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
+
+			onCreate(mDatabase);
+		}
+
+		public void loadDatabase() {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -144,77 +225,19 @@ public class ModelTable {
 		public long addModel(Model model) {
 			ContentValues initialValues = new ContentValues();
 
-			initialValues.put(COL_MODEL_NAME, model.name);
-			initialValues.put(COL_MODEL_TYPE, model.modelType);
-			initialValues.put(COL_CREATOR, model.creator);
-			initialValues.put(COL_BOOK_TITLE, model.bookTitle);
-			initialValues.put(COL_ISBN, model.ISBN);
-			initialValues.put(COL_ON_PAGE, model.page);
-			initialValues.put(COL_DIFFICULTY, model.difficulty);
-			initialValues.put(COL_PAPER, model.paper);
-			initialValues.put(COL_PIECES, model.pieces);
-			initialValues.put(COL_GLUE, model.glue);
-			initialValues.put(COL_CUTS, model.cuts);
+			initialValues.put(Model.COL_MODEL_NAME, model.name);
+			initialValues.put(Model.COL_MODEL_TYPE, model.modelType);
+			initialValues.put(Model.COL_CREATOR, model.creator);
+			initialValues.put(Model.COL_BOOK_TITLE, model.bookTitle);
+			initialValues.put(Model.COL_ISBN, model.ISBN);
+			initialValues.put(Model.COL_ON_PAGE, model.page);
+			initialValues.put(Model.COL_DIFFICULTY, model.difficulty);
+			initialValues.put(Model.COL_PAPER, model.paper);
+			initialValues.put(Model.COL_PIECES, model.pieces);
+			initialValues.put(Model.COL_GLUE, model.glue);
+			initialValues.put(Model.COL_CUTS, model.cuts);
 
 			return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
 		}
-	}
-
-	public Cursor getModelMatches(String query, String[] columns) {
-		String selection = COL_MODEL_NAME + " MATCH ?";
-
-		String[] selectionArgs = new String[] {
-												query + "*"
-		};
-
-		return query(selection, selectionArgs, columns);
-	}
-
-	public Cursor getBookTitleMatches(String query, String[] columns) {
-		String selection = COL_BOOK_TITLE + " MATCH ?";
-
-		String[] selectionArgs = new String[] {
-												query + "*"
-		};
-
-		return query(selection, selectionArgs, columns);
-	}
-
-	public Cursor getBookISBNMatches(String query, String[] columns) {
-		String selection = COL_ISBN + " MATCH ?";
-
-		String[] selectionArgs = new String[] {
-												query + "*"
-		};
-
-		return query(selection, selectionArgs, columns);
-	}
-
-	public Cursor getCreatorMatches(String query, String[] columns) {
-		String selection = COL_CREATOR + " MATCH ?";
-
-		String[] selectionArgs = new String[] {
-												query + "*"
-		};
-
-		return query(selection, selectionArgs, columns);
-	}
-
-	private Cursor query(String selection, String[] selectionArgs, String[] columns) {
-		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-
-		builder.setTables(FTS_VIRTUAL_TABLE);
-
-		Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
-
-		if (cursor == null) {
-			return null;
-		} else if (! cursor.moveToFirst()) {
-			cursor.close();
-
-			return null;
-		}
-
-		return cursor;
 	}
 }

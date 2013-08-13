@@ -30,26 +30,6 @@ public class MainMenu extends Activity implements OnClickListener {
 			startActivity(new Intent(this, QueryModelsByName.class));
 
 			break;
-		case R.id.btnFindBooks:
-			// startActivity(new Intent(this, QueryBookList.class));
-
-			break;
-		case R.id.btnFindAuthors:
-			// startActivity(new Intent(this, QueryAuthorList.class));
-
-			break;
-		case R.id.btnAddModel:
-			// startActivity(new Intent(this, AddEditModel.class));
-
-			break;
-		case R.id.btnAddBook:
-			// startActivity(new Intent(this, AddEditBook.class));
-
-			break;
-		case R.id.btnAddAuthor:
-			// startActivity(new Intent(this, AddEditAuthor.class));
-
-			break;
 		default:
 			// by default...search models
 			// startActivity(new Intent(this, QueryModelList.class));

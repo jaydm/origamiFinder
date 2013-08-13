@@ -2,8 +2,30 @@ package net.jnwd.origamiData;
 
 public class Model implements Comparable<Model> {
 	public static final String[] FIELDS = {
-		"Name:", "Model Type:", "Creator:", "Paper:", "Book Title:", "ISBN:", "Glue:", "Page:", "Cuts:", "Pieces:", "Difficulty"
+		"Name:",
+		"Model Type:",
+		"Creator:",
+		"Paper:",
+		"Book Title:",
+		"ISBN:",
+		"Glue:",
+		"Page:",
+		"Cuts:",
+		"Pieces:",
+		"Difficulty"
 	};
+
+	public static final String COL_MODEL_NAME = "MODELNAME";
+	public static final String COL_MODEL_TYPE = "MODELTYPE";
+	public static final String COL_CREATOR = "CREATOR";
+	public static final String COL_BOOK_TITLE = "BOOKTITLE";
+	public static final String COL_ISBN = "ISBN";
+	public static final String COL_ON_PAGE = "ONPAGE";
+	public static final String COL_DIFFICULTY = "DIFFICULTY";
+	public static final String COL_PAPER = "PAPER";
+	public static final String COL_PIECES = "PIECES";
+	public static final String COL_GLUE = "GLUE";
+	public static final String COL_CUTS = "CUTS";
 
 	public static final String tableName = "model";
 

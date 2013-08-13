@@ -1,16 +1,22 @@
 package net.jnwd.origamiFinder;
 
+import net.jnwd.origamiData.Model;
 import net.jnwd.origamiData.ModelTable;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class QueryModelsByName extends Activity {
 	private static final String TAG = "ModelByName";
@@ -22,44 +28,44 @@ public class QueryModelsByName extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Log.i(TAG, "Inflating the interface...");
+
 		setContentView(R.layout.activity_query_models_by_name);
 
-		Button doQueryButton = (Button) findViewById(R.id.btnQueryModelByName);
-
-		doQueryButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				queryModelsByName();
-			}
-		});
+		Log.i(TAG, "Creatinng the database reference...");
 
 		oData = new ModelTable(this);
+
+		oData.open();
+
+		oData.emptyDatabase();
+
+		oData.loadDatabase();
+
+		displayListView();
 	}
 
-	public void queryModelsByName() {
-		TextView modelName = (TextView) findViewById(R.id.txtQueryModelName);
-
-		String modelNameToSearch = modelName.getText().toString();
-
-		Log.i(TAG, "Searching for model name: " + modelNameToSearch);
-
-		Log.i(TAG, "About to do the query...");
-
-		Cursor matchingModels = oData.getModelMatches(modelName.getText().toString(), ModelTable.allColumns);
+	private void displayListView() {
+		Cursor cursor = oData.fetchAllModels();
 
 		int[] to = {
-			R.id.lstModelName,
-			R.id.lstModelType,
-			R.id.lstCreatorName
+			R.id.txtInfoModelName,
+			R.id.txtInfoModelCreator,
+			R.id.txtInfoBookTitle,
+			R.id.txtInfoBookISBN,
+			R.id.txtInfoModelPage,
+			R.id.txtInfoModelType,
+			R.id.txtInfoModelDifficulty,
+			R.id.txtInfoModelPaper,
+			R.id.txtLinfoPaperPieces,
+			R.id.txtInfoGlue,
+			R.id.txtInfoCuts
 		};
-
-		Log.i(TAG, "Resultset: " + matchingModels.getCount() + " rows");
 
 		dataAdapter = new SimpleCursorAdapter(
 			this, R.layout.model_info,
-			matchingModels,
-			ModelTable.allColumns,
+			cursor,
+			ModelTable.listColumns,
 			to,
 			0);
 
@@ -67,7 +73,42 @@ public class QueryModelsByName extends Activity {
 
 		listView.setAdapter(dataAdapter);
 
-		matchingModels.close();
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+				Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+
+				String modelName = cursor.getString(cursor.getColumnIndexOrThrow(Model.COL_MODEL_NAME));
+
+				Toast.makeText(getApplicationContext(), modelName, Toast.LENGTH_SHORT).show();
+			}
+		});
+
+		EditText myFilter = (EditText) findViewById(R.id.txtQueryModelName);
+
+		myFilter.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				dataAdapter.getFilter().filter(s.toString());
+			}
+		});
+
+		dataAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+			@Override
+			public Cursor runQuery(CharSequence constraint) {
+				return oData.getModelMatches(constraint.toString());
+			}
+		});
 	}
 
 	@Override
