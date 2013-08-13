@@ -55,6 +55,7 @@ public class QueryModelsByName extends Activity {
 		String[] from = ModelTable.listColumns;
 
 		int[] to = {
+		            R.id.txtModelID,
 			R.id.txtInfoModelName,
 			R.id.txtInfoModelCreator,
 			R.id.txtInfoBookTitle,

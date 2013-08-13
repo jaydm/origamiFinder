@@ -40,14 +40,7 @@ public class ModelTable {
 		Model.COL_MODEL_NAME,
 		Model.COL_CREATOR,
 		Model.COL_BOOK_TITLE,
-		Model.COL_ISBN,
-		Model.COL_ON_PAGE,
-		Model.COL_MODEL_TYPE,
-		Model.COL_DIFFICULTY,
-		Model.COL_PAPER,
-		Model.COL_PIECES,
-		Model.COL_GLUE,
-		Model.COL_CUTS
+		Model.COL_DIFFICULTY
 	};
 
 	private static final String DATABASE_NAME = "MODELS";

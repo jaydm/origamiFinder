@@ -25,12 +25,6 @@
         <requestFocus />
     </EditText>
 
-    <Button
-        android:id="@+id/btnQueryModelByName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_activity_find_models" />
-
     <ListView
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
