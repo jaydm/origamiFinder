@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.jnwd.origamiFinder.R;
 import android.content.ContentValues;
@@ -45,7 +47,7 @@ public class ModelTable {
 
 	private static final String DATABASE_NAME = "MODELS";
 	private static final String FTS_VIRTUAL_TABLE = "FTS";
-	private static final int DATABASE_VERSION = 8;
+	private static final int DATABASE_VERSION = 3;
 
 	private final Context mContext;
 
@@ -109,7 +111,7 @@ public class ModelTable {
 
 		builder.setTables(FTS_VIRTUAL_TABLE);
 
-		Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
+		Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, Model.COL_MODEL_NAME);
 
 		if (cursor == null) {
 			return null;
@@ -211,21 +213,26 @@ public class ModelTable {
 
 			try {
 				String line;
-				Model model;
 
-				Log.i(TAG, "Spin through the file...");
+				List<Model> allModels = new ArrayList<Model>();
+
+				Log.i(TAG, "Spin through the file...Only grab one copy of each model!");
 
 				while ((line = reader.readLine()) != null) {
-					model = new Model(line);
+					Model model = new Model(line);
 
-					// Log.i(TAG, "Adding model: " + model.toString());
+					if (! allModels.contains(model)) {
+						allModels.add(model);
 
-					long id = addModel(model);
+						long id = addModel(model);
 
-					if (id < 0) {
-						Log.e(TAG, "unable to add model: " + model.toString());
+						if (id < 0) {
+							Log.e(TAG, "unable to add model: " + model.toString());
+						}
 					}
 				}
+
+				Log.i(TAG, "Finished building model list...");
 			} finally {
 				reader.close();
 			}
@@ -236,6 +243,7 @@ public class ModelTable {
 		public long addModel(Model model) {
 			ContentValues initialValues = new ContentValues();
 
+			initialValues.put("_id", model.id);
 			initialValues.put(Model.COL_MODEL_NAME, model.name);
 			initialValues.put(Model.COL_MODEL_TYPE, model.modelType);
 			initialValues.put(Model.COL_CREATOR, model.creator);
