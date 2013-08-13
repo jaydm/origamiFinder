@@ -36,6 +36,7 @@ public class ModelTable {
 	};
 
 	public static final String[] listColumns = {
+		KEY_ROWID,
 		Model.COL_MODEL_NAME,
 		Model.COL_CREATOR,
 		Model.COL_BOOK_TITLE,

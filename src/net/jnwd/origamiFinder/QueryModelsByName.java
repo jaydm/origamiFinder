@@ -58,14 +58,7 @@ public class QueryModelsByName extends Activity {
 			R.id.txtInfoModelName,
 			R.id.txtInfoModelCreator,
 			R.id.txtInfoBookTitle,
-			R.id.txtInfoBookISBN,
-			R.id.txtInfoModelPage,
-			R.id.txtInfoModelType,
-			R.id.txtInfoModelDifficulty,
-			R.id.txtInfoModelPaper,
-			R.id.txtLinfoPaperPieces,
-			R.id.txtInfoGlue,
-			R.id.txtInfoCuts
+			R.id.txtInfoModelDifficulty
 		};
 
 		Log.i(TAG, "Layout: " + R.layout.model_info);
