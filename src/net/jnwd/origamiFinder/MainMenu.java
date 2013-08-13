@@ -1,14 +1,17 @@
 package net.jnwd.origamiFinder;
 
+import net.jnwd.origamiData.ModelTable;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainMenu extends Activity implements OnClickListener {
+	private final String TAG = "Main Menu";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

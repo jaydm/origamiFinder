@@ -51,7 +51,7 @@ public class ModelTable {
 
 	private static final String DATABASE_NAME = "MODELS";
 	private static final String FTS_VIRTUAL_TABLE = "FTS";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 8;
 
 	private final Context mContext;
 
@@ -59,13 +59,23 @@ public class ModelTable {
 	private SQLiteDatabase mDb;
 
 	public ModelTable(Context context) {
+		super();
+
 		mContext = context;
 	}
 
 	public ModelTable open() throws SQLException {
+		Log.i(TAG, "Inside the open routine of the database handler...");
+
+		Log.i(TAG, "Establishing the connection to the database...");
+
 		mDatabaseOpenHelper = new DatabaseOpenHelper(mContext);
 
+		Log.i(TAG, "Getting a writeable database instance...");
+
 		mDb = mDatabaseOpenHelper.getWritableDatabase();
+
+		Log.i(TAG, "Checking the database..." + (mDb == null ? "Null!!!!" : "Database Okay!"));
 
 		return this;
 	}
@@ -74,18 +84,6 @@ public class ModelTable {
 		if (mDatabaseOpenHelper != null) {
 			mDatabaseOpenHelper.close();
 		}
-	}
-
-	public void emptyDatabase() {
-		Log.i(TAG, "About to pass the empty message along...");
-
-		mDatabaseOpenHelper.emptyDatabase();
-	}
-
-	public void loadDatabase() {
-		Log.i(TAG, "About to pass the load message along...");
-
-		mDatabaseOpenHelper.loadDatabase();
 	}
 
 	public Cursor fetchAllModels() {
@@ -137,7 +135,7 @@ public class ModelTable {
 		private static final String FTS_TABLE_CREATE = "" +
 			"CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE + " " +
 			"USING fts3 (" +
-			KEY_ROWID + ", " +
+			KEY_ROWID + " integer PRIMARY KEY autoincrement," +
 			Model.COL_MODEL_NAME + ", " +
 			Model.COL_MODEL_TYPE + ", " +
 			Model.COL_CREATOR + ", " +
@@ -153,6 +151,8 @@ public class ModelTable {
 		DatabaseOpenHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
+			Log.i(TAG, "Trying to create the database instance...");
+
 			mHelperContext = context;
 		}
 
@@ -160,9 +160,19 @@ public class ModelTable {
 		public void onCreate(SQLiteDatabase db) {
 			Log.i(TAG, "About to perform the onCreate method...");
 
+			Log.i(TAG, "The database instance coming in is: " + db);
+
 			mDatabase = db;
 
+			Log.i(TAG, "Executing the create table script...");
+
+			Log.i(TAG, "Command: " + FTS_TABLE_CREATE);
+
 			mDatabase.execSQL(FTS_TABLE_CREATE);
+
+			Log.i(TAG, "Load the data into the database...");
+
+			loadDatabase();
 		}
 
 		@Override
@@ -171,20 +181,14 @@ public class ModelTable {
 
 			db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
 
+			Log.i(TAG, "Now...recreate the database...");
+
 			onCreate(db);
 		}
 
-		public void emptyDatabase() {
-			Log.i(TAG, "About to empty the database...Is the variable null?");
-
-			Log.i(TAG, "mDatabase is: " + (mDatabase == null ? "Null" : "Not null"));
-
-			mDatabase.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
-
-			onCreate(mDatabase);
-		}
-
 		public void loadDatabase() {
+			Log.i(TAG, "Start the load database thread...");
+
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -198,9 +202,16 @@ public class ModelTable {
 		}
 
 		private void loadModels() throws IOException {
+			Log.i(TAG, "Open up the raw data file...");
+			Log.i(TAG, "Open a reference to the app resources...");
+
 			final Resources resources = mHelperContext.getResources();
 
+			Log.i(TAG, "Open the raw data file...Get an inputStream...");
+
 			InputStream inputStream = resources.openRawResource(R.raw.model);
+
+			Log.i(TAG, "Set up a buffered reader...");
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -208,8 +219,12 @@ public class ModelTable {
 				String line;
 				Model model;
 
+				Log.i(TAG, "Spin through the file...");
+
 				while ((line = reader.readLine()) != null) {
 					model = new Model(line);
+
+					// Log.i(TAG, "Adding model: " + model.toString());
 
 					long id = addModel(model);
 
@@ -220,6 +235,8 @@ public class ModelTable {
 			} finally {
 				reader.close();
 			}
+
+			Log.i(TAG, "Finished loading the raw file into the database...");
 		}
 
 		public long addModel(Model model) {

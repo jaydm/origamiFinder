@@ -32,21 +32,27 @@ public class QueryModelsByName extends Activity {
 
 		setContentView(R.layout.activity_query_models_by_name);
 
-		Log.i(TAG, "Creatinng the database reference...");
+		Log.i(TAG, "Creating the database reference...");
 
 		oData = new ModelTable(this);
 
+		Log.i(TAG, "Opening the database...");
+
 		oData.open();
 
-		oData.emptyDatabase();
-
-		oData.loadDatabase();
+		Log.i(TAG, "Initial fill of the listView...");
 
 		displayListView();
 	}
 
 	private void displayListView() {
+		Log.i(TAG, "Getting a cursor to the full database...");
+
 		Cursor cursor = oData.fetchAllModels();
+
+		Log.i(TAG, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
+
+		String[] from = ModelTable.listColumns;
 
 		int[] to = {
 			R.id.txtInfoModelName,
@@ -62,10 +68,23 @@ public class QueryModelsByName extends Activity {
 			R.id.txtInfoCuts
 		};
 
+		Log.i(TAG, "Layout: " + R.layout.model_info);
+		Log.i(TAG, "From: ");
+
+		for (String row : from) {
+			Log.i(TAG, "row: " + row);
+		}
+
+		Log.i(TAG, "To: ");
+
+		for (int row : to) {
+			Log.i(TAG, "view: " + row);
+		}
+
 		dataAdapter = new SimpleCursorAdapter(
 			this, R.layout.model_info,
 			cursor,
-			ModelTable.listColumns,
+			from,
 			to,
 			0);
 
@@ -118,5 +137,4 @@ public class QueryModelsByName extends Activity {
 
 		return true;
 	}
-
 }
