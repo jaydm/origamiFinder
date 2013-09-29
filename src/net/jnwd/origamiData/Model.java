@@ -1,7 +1,11 @@
 
 package net.jnwd.origamiData;
 
+import android.util.Log;
+
 public class Model implements Comparable<Model> {
+    public final String Tag = "Model";
+
     public static final String[] FIELDS = {
             "Name:",
             "Model Type:",
@@ -66,17 +70,21 @@ public class Model implements Comparable<Model> {
 
         String[] data = allData.split("~");
 
-        id = Long.parseLong(data[0]);
-        name = deQuote(data[1]);
-        modelType = deQuote(data[2]);
-        difficulty = deQuote(data[3]);
-        creator = deQuote(data[4]);
-        bookTitle = deQuote(data[5]);
-        ISBN = deQuote(data[6]);
-        page = deQuote(data[7]);
-        pieces = deQuote(data[8]);
-        glue = deQuote(data[9]);
-        cuts = deQuote(data[10]);
+        try {
+            id = Long.parseLong(data[0]);
+            name = deQuote(data[1]);
+            modelType = deQuote(data[2]);
+            difficulty = deQuote(data[3]);
+            creator = deQuote(data[4]);
+            bookTitle = deQuote(data[5]);
+            ISBN = deQuote(data[6]);
+            page = deQuote(data[7]);
+            pieces = deQuote(data[8]);
+            glue = deQuote(data[9]);
+            cuts = deQuote(data[10]);
+        } catch (Exception e) {
+            Log.e(Tag, "Exception: " + e.getMessage());
+        }
     }
 
     private String deQuote(String data) {
@@ -86,7 +94,7 @@ public class Model implements Comparable<Model> {
             work = work.substring(1);
         }
 
-        if (work.charAt(work.length()) == '\"') {
+        if (work.charAt(work.length() - 1) == '\"') {
             work = work.substring(0, (work.length() - 1));
         }
 
