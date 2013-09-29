@@ -1,11 +1,7 @@
 
 package net.jnwd.origamiData;
 
-import android.util.Log;
-
 public class Model implements Comparable<Model> {
-    public final String Tag = "Model";
-
     public static final String[] FIELDS = {
             "Name:",
             "Model Type:",
@@ -83,7 +79,7 @@ public class Model implements Comparable<Model> {
             glue = deQuote(data[9]);
             cuts = deQuote(data[10]);
         } catch (Exception e) {
-            Log.e(Tag, "Exception: " + e.getMessage());
+
         }
     }
 

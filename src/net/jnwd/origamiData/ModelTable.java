@@ -20,12 +20,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.util.Log;
 import android.widget.Toast;
 
 public class ModelTable {
-    private static final String Tag = "ModelDatabase";
-
     private static final String KEY_ROWID = "_id";
 
     public static final String[] allColumns = {
@@ -67,17 +64,9 @@ public class ModelTable {
     }
 
     public ModelTable open() throws SQLException {
-        Log.i(Tag, "Inside the open routine of the database handler...");
-
-        Log.i(Tag, "Establishing the connection to the database...");
-
         mDatabaseOpenHelper = new DatabaseOpenHelper(mContext);
 
-        Log.i(Tag, "Getting a writeable database instance...");
-
         mDb = mDatabaseOpenHelper.getWritableDatabase();
-
-        Log.i(Tag, "Checking the database..." + (mDb == null ? "Null!!!!" : "Database Okay!"));
 
         return this;
     }
@@ -132,8 +121,6 @@ public class ModelTable {
     }
 
     private static class DatabaseOpenHelper extends SQLiteOpenHelper {
-        private final String Tag = "DatabaseOpenHelper";
-
         private static String DB_Path = "";
         private static String DB_Name = DATABASE_NAME;
 
@@ -159,8 +146,6 @@ public class ModelTable {
         DatabaseOpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
-            Log.i(Tag, "Trying to create the database instance...");
-
             DB_Path = context.getFilesDir().getPath() + "/../databases/";
 
             mHelperContext = context;
@@ -171,29 +156,19 @@ public class ModelTable {
                 Toast.makeText(mHelperContext,
                         "Unable to create database. Please contact App Creator.",
                         Toast.LENGTH_LONG).show();
-
-                Log.e(Tag, "Exception copying the database: " + ioe.getMessage());
             }
         }
 
         private void createDataBase() throws IOException {
-            Log.i(Tag, "Copy the database if not already in the right place...");
-
             if (checkDataBase()) {
-                Log.i(Tag, "Nothing to do here...The database already exists...");
-
                 return;
             }
-
-            Log.i(Tag, "Make sure that we do not have an open database connection...");
 
             this.getReadableDatabase();
             this.close();
 
             try {
                 copyDataBase();
-
-                Log.e(Tag, "createDatabase: Database created!");
             } catch (IOException mIOException) {
                 throw new Error("ErrorCopyingDataBase");
             }
@@ -201,9 +176,6 @@ public class ModelTable {
 
         private boolean checkDataBase() {
             String fullPath = DB_Path + DB_Name;
-
-            Log.i(Tag, "Is the database already here...");
-            Log.i(Tag, "Path: " + fullPath);
 
             File dbFile = new File(fullPath);
 
@@ -246,19 +218,9 @@ public class ModelTable {
                 return;
             }
 
-            Log.i(Tag, "About to perform the onCreate method...");
-
-            Log.i(Tag, "The database instance coming in is: " + db);
-
             mDatabase = db;
 
-            Log.i(Tag, "Executing the create table script...");
-
-            Log.i(Tag, "Command: " + FTS_TABLE_CREATE);
-
             mDatabase.execSQL(FTS_TABLE_CREATE);
-
-            Log.i(Tag, "Load the data into the database...");
 
             loadDatabase();
         }
@@ -271,19 +233,12 @@ public class ModelTable {
                 return;
             }
 
-            Log.w(Tag, "Upgrading database from version " + oldVersion + " to " + newVersion
-                    + ", which will destroy all old data");
-
             db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
-
-            Log.i(Tag, "Now...recreate the database...");
 
             onCreate(db);
         }
 
         private void loadDatabase() {
-            Log.i(Tag, "Start the load database thread...");
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -297,16 +252,9 @@ public class ModelTable {
         }
 
         private void loadModels() throws IOException {
-            Log.i(Tag, "Open up the raw data file...");
-            Log.i(Tag, "Open a reference to the app resources...");
-
             final Resources resources = mHelperContext.getResources();
 
-            Log.i(Tag, "Open the raw data file...Get an inputStream...");
-
             InputStream inputStream = resources.openRawResource(R.raw.model);
-
-            Log.i(Tag, "Set up a buffered reader...");
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -315,28 +263,20 @@ public class ModelTable {
 
                 List<Model> allModels = new ArrayList<Model>();
 
-                Log.i(Tag, "Spin through the file...Only grab one copy of each model!");
-
                 while ((line = reader.readLine()) != null) {
                     Model model = new Model(line);
 
                     if (!allModels.contains(model)) {
+                        // add the model to the list
                         allModels.add(model);
 
-                        long id = addModel(model);
-
-                        if (id < 0) {
-                            Log.e(Tag, "unable to add model: " + model.toString());
-                        }
+                        // add the model to the table
+                        addModel(model);
                     }
                 }
-
-                Log.i(Tag, "Finished building model list...");
             } finally {
                 reader.close();
             }
-
-            Log.i(Tag, "Finished loading the raw file into the database...");
         }
 
         public long addModel(Model model) {
