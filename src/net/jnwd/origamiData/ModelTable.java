@@ -135,7 +135,7 @@ public class ModelTable {
         private final String Tag = "DatabaseOpenHelper";
 
         private static String DB_Path = "";
-        private static String DB_Name = FTS_VIRTUAL_TABLE;
+        private static String DB_Name = DATABASE_NAME;
 
         private final Context mHelperContext;
         private SQLiteDatabase mDatabase;
@@ -161,7 +161,7 @@ public class ModelTable {
 
             Log.i(Tag, "Trying to create the database instance...");
 
-            DB_Path = context.getFilesDir().getPath() + "/../databases";
+            DB_Path = context.getFilesDir().getPath() + "/../databases/";
 
             mHelperContext = context;
 
@@ -177,9 +177,15 @@ public class ModelTable {
         }
 
         private void createDataBase() throws IOException {
+            Log.i(Tag, "Copy the database if not already in the right place...");
+
             if (checkDataBase()) {
+                Log.i(Tag, "Nothing to do here...The database already exists...");
+
                 return;
             }
+
+            Log.i(Tag, "Make sure that we do not have an open database connection...");
 
             this.getReadableDatabase();
             this.close();
@@ -194,7 +200,12 @@ public class ModelTable {
         }
 
         private boolean checkDataBase() {
-            File dbFile = new File(DB_Path + DB_Name);
+            String fullPath = DB_Path + DB_Name;
+
+            Log.i(Tag, "Is the database already here...");
+            Log.i(Tag, "Path: " + fullPath);
+
+            File dbFile = new File(fullPath);
 
             return dbFile.exists();
         }
