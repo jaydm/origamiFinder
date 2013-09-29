@@ -7,7 +7,7 @@
     android:padding="6dip" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/txtLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -18,8 +18,8 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_below="@+id/textView1"
+        android:layout_alignRight="@+id/txtLoading"
+        android:layout_below="@+id/txtLoading"
         android:text="@string/info_model_creator" />
 
     <TextView
@@ -42,9 +42,9 @@
         android:id="@+id/txtInfoModelName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_alignBaseline="@+id/txtLoading"
+        android:layout_alignBottom="@+id/txtLoading"
+        android:layout_toRightOf="@+id/txtLoading"
         android:text="Model Name" />
 
     <TextView

@@ -1,9 +1,13 @@
+
 package net.jnwd.origamiData;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,246 +21,330 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
+import android.widget.Toast;
 
 public class ModelTable {
-	private static final String TAG = "ModelDatabase";
-	private static final String KEY_ROWID = "_id";
+    private static final String Tag = "ModelDatabase";
 
-	public static final String[] allColumns = {
-		KEY_ROWID,
-		Model.COL_MODEL_NAME,
-		Model.COL_MODEL_TYPE,
-		Model.COL_CREATOR,
-		Model.COL_BOOK_TITLE,
-		Model.COL_ISBN,
-		Model.COL_ON_PAGE,
-		Model.COL_DIFFICULTY,
-		Model.COL_PAPER,
-		Model.COL_PIECES,
-		Model.COL_GLUE,
-		Model.COL_CUTS
-	};
+    private static final String KEY_ROWID = "_id";
 
-	public static final String[] listColumns = {
-		KEY_ROWID,
-		Model.COL_MODEL_NAME,
-		Model.COL_CREATOR,
-		Model.COL_BOOK_TITLE,
-		Model.COL_DIFFICULTY
-	};
-
-	private static final String DATABASE_NAME = "MODELS";
-	private static final String FTS_VIRTUAL_TABLE = "FTS";
-	private static final int DATABASE_VERSION = 3;
-
-	private final Context mContext;
+    public static final String[] allColumns = {
+            KEY_ROWID,
+            Model.COL_MODEL_NAME,
+            Model.COL_MODEL_TYPE,
+            Model.COL_CREATOR,
+            Model.COL_BOOK_TITLE,
+            Model.COL_ISBN,
+            Model.COL_ON_PAGE,
+            Model.COL_DIFFICULTY,
+            Model.COL_PAPER,
+            Model.COL_PIECES,
+            Model.COL_GLUE,
+            Model.COL_CUTS
+    };
 
-	private DatabaseOpenHelper mDatabaseOpenHelper;
-	private SQLiteDatabase mDb;
+    public static final String[] listColumns = {
+            KEY_ROWID,
+            Model.COL_MODEL_NAME,
+            Model.COL_CREATOR,
+            Model.COL_BOOK_TITLE,
+            Model.COL_DIFFICULTY
+    };
 
-	public ModelTable(Context context) {
-		super();
+    private static final String DATABASE_NAME = "MODELS";
+    private static final String FTS_VIRTUAL_TABLE = "FTS";
+    private static final int DATABASE_VERSION = 3;
 
-		mContext = context;
-	}
+    private final Context mContext;
 
-	public ModelTable open() throws SQLException {
-		Log.i(TAG, "Inside the open routine of the database handler...");
+    private DatabaseOpenHelper mDatabaseOpenHelper;
+    private SQLiteDatabase mDb;
 
-		Log.i(TAG, "Establishing the connection to the database...");
+    public ModelTable(Context context) {
+        super();
 
-		mDatabaseOpenHelper = new DatabaseOpenHelper(mContext);
+        mContext = context;
+    }
 
-		Log.i(TAG, "Getting a writeable database instance...");
+    public ModelTable open() throws SQLException {
+        Log.i(Tag, "Inside the open routine of the database handler...");
 
-		mDb = mDatabaseOpenHelper.getWritableDatabase();
+        Log.i(Tag, "Establishing the connection to the database...");
 
-		Log.i(TAG, "Checking the database..." + (mDb == null ? "Null!!!!" : "Database Okay!"));
+        mDatabaseOpenHelper = new DatabaseOpenHelper(mContext);
 
-		return this;
-	}
+        Log.i(Tag, "Getting a writeable database instance...");
 
-	public void close() {
-		if (mDatabaseOpenHelper != null) {
-			mDatabaseOpenHelper.close();
-		}
-	}
+        mDb = mDatabaseOpenHelper.getWritableDatabase();
 
-	public Cursor fetchAllModels() {
-		Cursor mCursor = mDb.query(FTS_VIRTUAL_TABLE, listColumns, null, null, null, null, null);
+        Log.i(Tag, "Checking the database..." + (mDb == null ? "Null!!!!" : "Database Okay!"));
 
-		if (mCursor != null) {
-			mCursor.moveToFirst();
-		}
+        return this;
+    }
 
-		return mCursor;
-	}
+    public void close() {
+        if (mDatabaseOpenHelper != null) {
+            mDatabaseOpenHelper.close();
+        }
+    }
 
-	public Cursor getModelMatches(String query) {
-		return getModelMatches(query, listColumns);
-	}
+    public Cursor fetchAllModels() {
+        Cursor mCursor = mDb.query(FTS_VIRTUAL_TABLE, listColumns, null, null, null, null, null);
 
-	public Cursor getModelMatches(String query, String[] columns) {
-		String selection = Model.COL_MODEL_NAME + " MATCH ?";
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
 
-		String[] selectionArgs = new String[] {
-												query + "*"
-		};
+        return mCursor;
+    }
 
-		return query(selection, selectionArgs, columns);
-	}
+    public Cursor getModelMatches(String query) {
+        return getModelMatches(query, listColumns);
+    }
 
-	private Cursor query(String selection, String[] selectionArgs, String[] columns) {
-		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+    public Cursor getModelMatches(String query, String[] columns) {
+        String selection = Model.COL_MODEL_NAME + " MATCH ?";
 
-		builder.setTables(FTS_VIRTUAL_TABLE);
+        String[] selectionArgs = new String[] {
+                query + "*"
+        };
 
-		Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns, selection, selectionArgs, null, null, Model.COL_MODEL_NAME);
+        return query(selection, selectionArgs, columns);
+    }
 
-		if (cursor == null) {
-			return null;
-		} else if (! cursor.moveToFirst()) {
-			cursor.close();
+    private Cursor query(String selection, String[] selectionArgs, String[] columns) {
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
-			return null;
-		}
+        builder.setTables(FTS_VIRTUAL_TABLE);
 
-		return cursor;
-	}
+        Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), columns,
+                selection, selectionArgs, null, null, Model.COL_MODEL_NAME);
 
-	private static class DatabaseOpenHelper extends SQLiteOpenHelper {
-		private final Context mHelperContext;
-		private SQLiteDatabase mDatabase;
+        if (cursor == null) {
+            return null;
+        } else if (!cursor.moveToFirst()) {
+            cursor.close();
 
-		private static final String FTS_TABLE_CREATE = "" +
-			"CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE + " " +
-			"USING fts3 (" +
-			KEY_ROWID + " integer PRIMARY KEY autoincrement," +
-			Model.COL_MODEL_NAME + ", " +
-			Model.COL_MODEL_TYPE + ", " +
-			Model.COL_CREATOR + ", " +
-			Model.COL_BOOK_TITLE + ", " +
-			Model.COL_ISBN + ", " +
-			Model.COL_ON_PAGE + ", " +
-			Model.COL_DIFFICULTY + ", " +
-			Model.COL_PAPER + ", " +
-			Model.COL_PIECES + ", " +
-			Model.COL_GLUE + ", " +
-			Model.COL_CUTS + ")";
+            return null;
+        }
 
-		DatabaseOpenHelper(Context context) {
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        return cursor;
+    }
 
-			Log.i(TAG, "Trying to create the database instance...");
+    private static class DatabaseOpenHelper extends SQLiteOpenHelper {
+        private final String Tag = "DatabaseOpenHelper";
 
-			mHelperContext = context;
-		}
+        private static String DB_Path = "";
+        private static String DB_Name = FTS_VIRTUAL_TABLE;
 
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			Log.i(TAG, "About to perform the onCreate method...");
+        private final Context mHelperContext;
+        private SQLiteDatabase mDatabase;
 
-			Log.i(TAG, "The database instance coming in is: " + db);
+        private static final String FTS_TABLE_CREATE = "" +
+                "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE + " " +
+                "USING fts3 (" +
+                KEY_ROWID + " integer PRIMARY KEY autoincrement," +
+                Model.COL_MODEL_NAME + ", " +
+                Model.COL_MODEL_TYPE + ", " +
+                Model.COL_CREATOR + ", " +
+                Model.COL_BOOK_TITLE + ", " +
+                Model.COL_ISBN + ", " +
+                Model.COL_ON_PAGE + ", " +
+                Model.COL_DIFFICULTY + ", " +
+                Model.COL_PAPER + ", " +
+                Model.COL_PIECES + ", " +
+                Model.COL_GLUE + ", " +
+                Model.COL_CUTS + ")";
 
-			mDatabase = db;
+        DatabaseOpenHelper(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
-			Log.i(TAG, "Executing the create table script...");
+            Log.i(Tag, "Trying to create the database instance...");
 
-			Log.i(TAG, "Command: " + FTS_TABLE_CREATE);
+            DB_Path = context.getFilesDir().getPath() + "/../databases";
 
-			mDatabase.execSQL(FTS_TABLE_CREATE);
+            mHelperContext = context;
 
-			Log.i(TAG, "Load the data into the database...");
+            try {
+                createDataBase();
+            } catch (IOException ioe) {
+                Toast.makeText(mHelperContext,
+                        "Unable to create database. Please contact App Creator.",
+                        Toast.LENGTH_LONG).show();
 
-			loadDatabase();
-		}
+                Log.e(Tag, "Exception copying the database: " + ioe.getMessage());
+            }
+        }
 
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
+        private void createDataBase() throws IOException {
+            if (checkDataBase()) {
+                return;
+            }
 
-			db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
+            this.getReadableDatabase();
+            this.close();
 
-			Log.i(TAG, "Now...recreate the database...");
+            try {
+                copyDataBase();
 
-			onCreate(db);
-		}
+                Log.e(Tag, "createDatabase: Database created!");
+            } catch (IOException mIOException) {
+                throw new Error("ErrorCopyingDataBase");
+            }
+        }
 
-		public void loadDatabase() {
-			Log.i(TAG, "Start the load database thread...");
+        private boolean checkDataBase() {
+            File dbFile = new File(DB_Path + DB_Name);
 
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						loadModels();
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-				}
-			}).start();
-		}
+            return dbFile.exists();
+        }
 
-		private void loadModels() throws IOException {
-			Log.i(TAG, "Open up the raw data file...");
-			Log.i(TAG, "Open a reference to the app resources...");
+        private void copyDataBase() throws IOException {
+            InputStream mInput = mHelperContext.getAssets().open(DB_Name);
 
-			final Resources resources = mHelperContext.getResources();
+            String outFileName = DB_Path + DB_Name;
 
-			Log.i(TAG, "Open the raw data file...Get an inputStream...");
+            OutputStream mOutput = new FileOutputStream(outFileName);
 
-			InputStream inputStream = resources.openRawResource(R.raw.model);
+            byte[] mBuffer = new byte[1024];
+            int mLength;
 
-			Log.i(TAG, "Set up a buffered reader...");
+            while ((mLength = mInput.read(mBuffer)) > 0) {
+                mOutput.write(mBuffer, 0, mLength);
+            }
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            mOutput.flush();
+            mOutput.close();
+            mInput.close();
+        }
 
-			try {
-				String line;
+        @Override
+        public synchronized void close() {
+            if (mDatabase != null) {
+                mDatabase.close();
+            }
 
-				List<Model> allModels = new ArrayList<Model>();
+            super.close();
+        }
 
-				Log.i(TAG, "Spin through the file...Only grab one copy of each model!");
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            boolean bypass = true;
 
-				while ((line = reader.readLine()) != null) {
-					Model model = new Model(line);
+            if (bypass) {
+                return;
+            }
 
-					if (! allModels.contains(model)) {
-						allModels.add(model);
+            Log.i(Tag, "About to perform the onCreate method...");
 
-						long id = addModel(model);
+            Log.i(Tag, "The database instance coming in is: " + db);
 
-						if (id < 0) {
-							Log.e(TAG, "unable to add model: " + model.toString());
-						}
-					}
-				}
+            mDatabase = db;
 
-				Log.i(TAG, "Finished building model list...");
-			} finally {
-				reader.close();
-			}
+            Log.i(Tag, "Executing the create table script...");
 
-			Log.i(TAG, "Finished loading the raw file into the database...");
-		}
+            Log.i(Tag, "Command: " + FTS_TABLE_CREATE);
 
-		public long addModel(Model model) {
-			ContentValues initialValues = new ContentValues();
+            mDatabase.execSQL(FTS_TABLE_CREATE);
 
-			initialValues.put("_id", model.id);
-			initialValues.put(Model.COL_MODEL_NAME, model.name);
-			initialValues.put(Model.COL_MODEL_TYPE, model.modelType);
-			initialValues.put(Model.COL_CREATOR, model.creator);
-			initialValues.put(Model.COL_BOOK_TITLE, model.bookTitle);
-			initialValues.put(Model.COL_ISBN, model.ISBN);
-			initialValues.put(Model.COL_ON_PAGE, model.page);
-			initialValues.put(Model.COL_DIFFICULTY, model.difficulty);
-			initialValues.put(Model.COL_PAPER, model.paper);
-			initialValues.put(Model.COL_PIECES, model.pieces);
-			initialValues.put(Model.COL_GLUE, model.glue);
-			initialValues.put(Model.COL_CUTS, model.cuts);
+            Log.i(Tag, "Load the data into the database...");
 
-			return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
-		}
-	}
+            loadDatabase();
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            boolean bypass = true;
+
+            if (bypass) {
+                return;
+            }
+
+            Log.w(Tag, "Upgrading database from version " + oldVersion + " to " + newVersion
+                    + ", which will destroy all old data");
+
+            db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
+
+            Log.i(Tag, "Now...recreate the database...");
+
+            onCreate(db);
+        }
+
+        private void loadDatabase() {
+            Log.i(Tag, "Start the load database thread...");
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        loadModels();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
+        }
+
+        private void loadModels() throws IOException {
+            Log.i(Tag, "Open up the raw data file...");
+            Log.i(Tag, "Open a reference to the app resources...");
+
+            final Resources resources = mHelperContext.getResources();
+
+            Log.i(Tag, "Open the raw data file...Get an inputStream...");
+
+            InputStream inputStream = resources.openRawResource(R.raw.model);
+
+            Log.i(Tag, "Set up a buffered reader...");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            try {
+                String line;
+
+                List<Model> allModels = new ArrayList<Model>();
+
+                Log.i(Tag, "Spin through the file...Only grab one copy of each model!");
+
+                while ((line = reader.readLine()) != null) {
+                    Model model = new Model(line);
+
+                    if (!allModels.contains(model)) {
+                        allModels.add(model);
+
+                        long id = addModel(model);
+
+                        if (id < 0) {
+                            Log.e(Tag, "unable to add model: " + model.toString());
+                        }
+                    }
+                }
+
+                Log.i(Tag, "Finished building model list...");
+            } finally {
+                reader.close();
+            }
+
+            Log.i(Tag, "Finished loading the raw file into the database...");
+        }
+
+        public long addModel(Model model) {
+            ContentValues initialValues = new ContentValues();
+
+            initialValues.put("_id", model.id);
+            initialValues.put(Model.COL_MODEL_NAME, model.name);
+            initialValues.put(Model.COL_MODEL_TYPE, model.modelType);
+            initialValues.put(Model.COL_CREATOR, model.creator);
+            initialValues.put(Model.COL_BOOK_TITLE, model.bookTitle);
+            initialValues.put(Model.COL_ISBN, model.ISBN);
+            initialValues.put(Model.COL_ON_PAGE, model.page);
+            initialValues.put(Model.COL_DIFFICULTY, model.difficulty);
+            initialValues.put(Model.COL_PAPER, model.paper);
+            initialValues.put(Model.COL_PIECES, model.pieces);
+            initialValues.put(Model.COL_GLUE, model.glue);
+            initialValues.put(Model.COL_CUTS, model.cuts);
+
+            return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
+        }
+    }
 }

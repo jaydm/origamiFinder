@@ -1,3 +1,4 @@
+
 package net.jnwd.origamiFinder;
 
 import net.jnwd.origamiData.Model;
@@ -19,116 +20,119 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 public class QueryModelsByName extends Activity {
-	private static final String TAG = "ModelByName";
+    private static final String TAG = "ModelByName";
 
-	private ModelTable oData;
-	private SimpleCursorAdapter dataAdapter;
+    private ModelTable oData;
+    private SimpleCursorAdapter dataAdapter;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		Log.i(TAG, "Inflating the interface...");
+        Log.i(TAG, "Inflating the interface...");
 
-		setContentView(R.layout.activity_query_models_by_name);
+        setContentView(R.layout.loading_data);
 
-		Log.i(TAG, "Creating the database reference...");
+        Log.i(TAG, "Creating the database reference...");
 
-		oData = new ModelTable(this);
+        oData = new ModelTable(this);
 
-		Log.i(TAG, "Opening the database...");
+        Log.i(TAG, "Opening the database...");
 
-		oData.open();
+        oData.open();
 
-		Log.i(TAG, "Initial fill of the listView...");
+        setContentView(R.layout.activity_query_models_by_name);
 
-		displayListView();
-	}
+        Log.i(TAG, "Initial fill of the listView...");
 
-	private void displayListView() {
-		Log.i(TAG, "Getting a cursor to the full database...");
+        displayListView();
+    }
 
-		Cursor cursor = oData.fetchAllModels();
+    private void displayListView() {
+        Log.i(TAG, "Getting a cursor to the full database...");
 
-		Log.i(TAG, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
+        Cursor cursor = oData.fetchAllModels();
 
-		String[] from = ModelTable.listColumns;
+        Log.i(TAG, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
 
-		int[] to = {
-		            R.id.txtModelID,
-			R.id.txtInfoModelName,
-			R.id.txtInfoModelCreator,
-			R.id.txtInfoBookTitle,
-			R.id.txtInfoModelDifficulty
-		};
+        String[] from = ModelTable.listColumns;
 
-		Log.i(TAG, "Layout: " + R.layout.model_info);
-		Log.i(TAG, "From: ");
+        int[] to = {
+                R.id.txtModelID,
+                R.id.txtInfoModelName,
+                R.id.txtInfoModelCreator,
+                R.id.txtInfoBookTitle,
+                R.id.txtInfoModelDifficulty
+        };
 
-		for (String row : from) {
-			Log.i(TAG, "row: " + row);
-		}
+        Log.i(TAG, "Layout: " + R.layout.model_info);
+        Log.i(TAG, "From: ");
 
-		Log.i(TAG, "To: ");
+        for (String row : from) {
+            Log.i(TAG, "row: " + row);
+        }
 
-		for (int row : to) {
-			Log.i(TAG, "view: " + row);
-		}
+        Log.i(TAG, "To: ");
 
-		dataAdapter = new SimpleCursorAdapter(
-			this, R.layout.model_info,
-			cursor,
-			from,
-			to,
-			0);
+        for (int row : to) {
+            Log.i(TAG, "view: " + row);
+        }
 
-		ListView listView = (ListView) findViewById(R.id.listView1);
+        dataAdapter = new SimpleCursorAdapter(
+                this, R.layout.model_info,
+                cursor,
+                from,
+                to,
+                0);
 
-		listView.setAdapter(dataAdapter);
+        ListView listView = (ListView) findViewById(R.id.listView1);
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-				Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+        listView.setAdapter(dataAdapter);
 
-				String modelName = cursor.getString(cursor.getColumnIndexOrThrow(Model.COL_MODEL_NAME));
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
 
-				Toast.makeText(getApplicationContext(), modelName, Toast.LENGTH_SHORT).show();
-			}
-		});
+                String modelName = cursor.getString(cursor
+                        .getColumnIndexOrThrow(Model.COL_MODEL_NAME));
 
-		EditText myFilter = (EditText) findViewById(R.id.txtQueryModelName);
+                Toast.makeText(getApplicationContext(), modelName, Toast.LENGTH_SHORT).show();
+            }
+        });
 
-		myFilter.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void afterTextChanged(Editable s) {
+        EditText myFilter = (EditText) findViewById(R.id.txtQueryModelName);
 
-			}
+        myFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-			}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				dataAdapter.getFilter().filter(s.toString());
-			}
-		});
+            }
 
-		dataAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-			@Override
-			public Cursor runQuery(CharSequence constraint) {
-				return oData.getModelMatches(constraint.toString());
-			}
-		});
-	}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                dataAdapter.getFilter().filter(s.toString());
+            }
+        });
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.query_models_by_name, menu);
+        dataAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+            @Override
+            public Cursor runQuery(CharSequence constraint) {
+                return oData.getModelMatches(constraint.toString());
+            }
+        });
+    }
 
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.query_models_by_name, menu);
+
+        return true;
+    }
 }
