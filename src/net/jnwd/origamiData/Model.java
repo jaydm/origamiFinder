@@ -34,6 +34,20 @@ public class Model implements Comparable<Model> {
     public static final String COL_GLUE = "GLUE";
     public static final String COL_CUTS = "CUTS";
 
+    public static final String[] allColumns = {
+            COL_MODEL_NAME,
+            COL_MODEL_TYPE,
+            COL_CREATOR,
+            COL_BOOK_TITLE,
+            COL_ISBN,
+            COL_ON_PAGE,
+            COL_DIFFICULTY,
+            COL_PAPER,
+            COL_PIECES,
+            COL_GLUE,
+            COL_CUTS
+    };
+
     public static final String tableName = "model";
 
     public long id;
@@ -87,6 +101,21 @@ public class Model implements Comparable<Model> {
         } catch (Exception e) {
             Log.e(Tag, "Exception: " + e.getMessage());
         }
+    }
+
+    public Model(Cursor cursor) {
+        this();
+
+        name = cursor.getString(cursor.getColumnIndex(COL_MODEL_NAME));
+        modelType = cursor.getString(cursor.getColumnIndex(COL_MODEL_TYPE));
+        difficulty = cursor.getString(cursor.getColumnIndex(COL_DIFFICULTY));
+        creator = cursor.getString(cursor.getColumnIndex(COL_DIFFICULTY));
+        bookTitle = cursor.getString(cursor.getColumnIndex(COL_BOOK_TITLE));
+        ISBN = cursor.getString(cursor.getColumnIndex(COL_ISBN));
+        page = cursor.getString(cursor.getColumnIndex(COL_ON_PAGE));
+        pieces = cursor.getString(cursor.getColumnIndex(COL_PIECES));
+        glue = cursor.getString(cursor.getColumnIndex(COL_GLUE));
+        cuts = cursor.getString(cursor.getColumnIndex(COL_CUTS));
     }
 
     private String deQuote(String data) {

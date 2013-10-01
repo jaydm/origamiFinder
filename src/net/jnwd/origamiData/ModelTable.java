@@ -113,7 +113,39 @@ public class ModelTable {
     }
 
     public Book getBook(String isbn) {
-        return new Book();
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+
+        builder.setTables(FTS_VIRTUAL_TABLE);
+
+        String selection = Model.COL_ISBN + " = " + isbn;
+
+        Cursor models = builder.query(mDatabaseOpenHelper.getReadableDatabase(), Model.allColumns,
+                selection, null, null, null, Model.COL_ON_PAGE);
+
+        if (models == null) {
+            return null;
+        } else if (!models.moveToFirst()) {
+            models.close();
+
+            return null;
+        }
+
+        Book book = new Book();
+
+        book.setTitle(models.getString(models.getColumnIndex(Model.COL_BOOK_TITLE)));
+        book.setIsbn(models.getString(models.getColumnIndex(Model.COL_ISBN)));
+
+        List<Model> modelList = new ArrayList<Model>();
+
+        while (!models.isAfterLast()) {
+            modelList.add(new Model(models));
+
+            models.moveToNext();
+        }
+
+        book.setContents(modelList);
+
+        return book;
     }
 
     private Cursor query(String selection, String[] selectionArgs, String[] columns) {

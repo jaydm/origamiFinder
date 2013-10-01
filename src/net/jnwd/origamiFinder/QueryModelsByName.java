@@ -60,10 +60,10 @@ public class QueryModelsByName extends Activity implements OnItemClickListener {
 
         int[] to = {
                 R.id.txtModelID,
-                R.id.txtInfoModelName,
-                R.id.txtInfoModelCreator,
+                R.id.fmiModelName,
+                R.id.fmiModelCreator,
                 R.id.txtInfoBookTitle,
-                R.id.txtInfoModelDifficulty
+                R.id.fmiModelDifficulty
         };
 
         Log.i(TAG, "Layout: " + R.layout.model_info);

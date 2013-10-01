@@ -27,6 +27,13 @@ public class ShowBook extends Activity {
         oData.open();
 
         Book book = oData.getBook(savedInstanceState.getString("ISBN"));
+        /*
+         * ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+         * this, R.array.attribute_types, android.R.layout.simple_spinner_item);
+         * adapter
+         * .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item
+         * ); attributeType.setAdapter(adapter);
+         */
 
         setContentView(R.layout.activity_show_book);
 

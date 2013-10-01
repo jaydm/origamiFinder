@@ -23,19 +23,11 @@
         android:text="@string/info_model_creator" />
 
     <TextView
-        android:id="@+id/sbShowModelCount"
+        android:id="@+id/fmiDifficultyLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/fmiCreatorLabel"
         android:layout_below="@+id/fmiCreatorLabel"
-        android:text="@string/info_book_title" />
-
-    <TextView
-        android:id="@+id/fmiDifficultyLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/sbShowModelCount"
-        android:layout_below="@+id/sbShowModelCount"
         android:text="@string/info_model_difficulty" />
 
     <TextView
@@ -57,15 +49,6 @@
         android:text="Model Creator" />
 
     <TextView
-        android:id="@+id/txtInfoBookTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/sbShowModelCount"
-        android:layout_alignBottom="@+id/sbShowModelCount"
-        android:layout_alignLeft="@+id/fmiModelCreator"
-        android:text="Book Title" />
-
-    <TextView
         android:id="@+id/fmiModelDifficulty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -81,5 +64,13 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fmiCreatorLabel"
+        android:layout_alignParentBottom="true"
+        android:text="TextView" />
 
 </RelativeLayout>
