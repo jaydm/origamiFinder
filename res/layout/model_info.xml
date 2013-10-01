@@ -15,7 +15,7 @@
         android:text="@string/info_model_name" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/sbISBNLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/txtLoading"
@@ -23,19 +23,19 @@
         android:text="@string/info_model_creator" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/sbShowModelCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_below="@+id/textView2"
+        android:layout_alignRight="@+id/sbISBNLabel"
+        android:layout_below="@+id/sbISBNLabel"
         android:text="@string/info_book_title" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView3"
-        android:layout_below="@+id/textView3"
+        android:layout_alignRight="@+id/sbShowModelCount"
+        android:layout_below="@+id/sbShowModelCount"
         android:text="@string/info_model_difficulty" />
 
     <TextView
@@ -51,8 +51,8 @@
         android:id="@+id/txtInfoModelCreator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignBaseline="@+id/sbISBNLabel"
+        android:layout_alignBottom="@+id/sbISBNLabel"
         android:layout_alignLeft="@+id/txtInfoModelName"
         android:text="Model Creator" />
 
@@ -60,8 +60,8 @@
         android:id="@+id/txtInfoBookTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView3"
-        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignBaseline="@+id/sbShowModelCount"
+        android:layout_alignBottom="@+id/sbShowModelCount"
         android:layout_alignLeft="@+id/txtInfoModelCreator"
         android:text="Book Title" />
 

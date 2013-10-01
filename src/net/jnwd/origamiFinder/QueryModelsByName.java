@@ -4,6 +4,7 @@ package net.jnwd.origamiFinder;
 import net.jnwd.origamiData.Model;
 import net.jnwd.origamiData.ModelTable;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,7 +20,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-public class QueryModelsByName extends Activity {
+public class QueryModelsByName extends Activity implements OnItemClickListener {
     private static final String TAG = "ModelByName";
 
     private ModelTable oData;
@@ -85,21 +86,11 @@ public class QueryModelsByName extends Activity {
                 to,
                 0);
 
-        ListView listView = (ListView) findViewById(R.id.listView1);
+        ListView listView = (ListView) findViewById(R.id.sbModelListing);
 
         listView.setAdapter(dataAdapter);
 
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
-
-                String modelName = cursor.getString(cursor
-                        .getColumnIndexOrThrow(Model.COL_MODEL_NAME));
-
-                Toast.makeText(getApplicationContext(), modelName, Toast.LENGTH_SHORT).show();
-            }
-        });
+        listView.setOnItemClickListener(this);
 
         EditText myFilter = (EditText) findViewById(R.id.txtQueryModelName);
 
@@ -134,5 +125,29 @@ public class QueryModelsByName extends Activity {
         getMenuInflater().inflate(R.menu.query_models_by_name, menu);
 
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget
+     * .AdapterView, android.view.View, int, long)
+     */
+    @Override
+    public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+        Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+
+        String modelName = cursor.getString(cursor
+                .getColumnIndexOrThrow(Model.COL_MODEL_NAME));
+
+        Toast.makeText(getApplicationContext(), modelName, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, ShowBook.class);
+
+        Bundle bookBundle = Model.toBookBundle(cursor);
+
+        intent.putExtra("BookBundle", bookBundle);
+
+        startActivity(intent);
     }
 }

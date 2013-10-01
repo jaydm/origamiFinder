@@ -26,7 +26,7 @@
     </EditText>
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/sbModelListing"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 

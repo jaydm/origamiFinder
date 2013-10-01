@@ -112,6 +112,10 @@ public class ModelTable {
         return query(selection, selectionArgs, columns);
     }
 
+    public Book getBook(String isbn) {
+        return new Book();
+    }
+
     private Cursor query(String selection, String[] selectionArgs, String[] columns) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 

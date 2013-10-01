@@ -33,6 +33,12 @@
     <string name="info_model_paper_pieces">Pieces:</string>
     <string name="info_glue">Glue:</string>
     <string name="info_cuts">Cuts:</string>
-    <string name="loading_text">Loading Origami Database</string>
+    <string name="loading_text">Loading Data</string>
+    <string name="title_activity_show_book">Show Book Details</string>
+    <string name="bookImageDescription">Cover of Book</string>
+    <string name="sbTitleLabelText">Title</string>
+    <string name="sbISBNLabelText">ISBN</string>
+    <string name="sbModelCountText">Number of models: </string>
+    <string name="defaultEmptyText"></string>
 
 </resources>
