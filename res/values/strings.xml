@@ -39,7 +39,7 @@
     <string name="bookImageDescription">Cover of Book</string>
     <string name="sbTitleLabelText">Title</string>
     <string name="sbISBNLabelText">ISBN</string>
-    <string name="sbModelCountText">Number of models: </string>
+    <string name="sbModelCountText">Number of models</string>
     <string name="defaultEmptyText"></string>
 
 </resources>

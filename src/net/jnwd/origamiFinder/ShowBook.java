@@ -9,13 +9,12 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class ShowBook extends Activity {
-    private static final String TAG = "ShowBook";
+    private static final String Tag = "ShowBook";
 
     public static final String Extra_Message = "ISBN";
 
@@ -26,7 +25,7 @@ public class ShowBook extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i(TAG, "Show loading screen...");
+        Log.i(Tag, "Show loading screen...");
 
         setContentView(R.layout.loading_data);
 
@@ -35,20 +34,14 @@ public class ShowBook extends Activity {
 
         Intent intent = getIntent();
 
-        Log.i(TAG, "Trying to get the passed in ISBN number...");
-
         String isbn = intent.getStringExtra(Extra_Message);
-
-        Log.i(TAG, "Got ISBN: " + isbn);
-
-        Log.i(TAG, "Trying to get book info...");
 
         Cursor cursor;
 
         cursor = oData.getBookByISBN(isbn);
 
         if (cursor == null) {
-            Log.e(TAG, "No result from book query...");
+            Log.e(Tag, "No result from book query...");
 
             return;
         }
@@ -58,37 +51,34 @@ public class ShowBook extends Activity {
         String title = cursor.getString(cursor.getColumnIndex(Model.COL_BOOK_TITLE));
         String isbnNumber = cursor.getString(cursor.getColumnIndex(Model.COL_ISBN));
 
-        Log.i(TAG, "Title: " + title);
-        Log.i(TAG, "ISBN: " + isbnNumber);
-
-        Log.i(TAG, "Switch layout...");
-
         setContentView(R.layout.activity_show_book);
 
-        Log.i(TAG, "Push the title and ISBN into the layout...");
+        Log.i(Tag, "Pushing the title...");
 
-        ((EditText) findViewById(R.id.sbTitle)).setText(title);
+        ((TextView) findViewById(R.id.sbTitle)).setText(title);
 
-        ((EditText) findViewById(R.id.sbISBN)).setText(isbnNumber);
+        Log.i(Tag, "Pushing the ISBN...");
 
-        TextView modelCount = (TextView) findViewById(R.id.miTitleLabel);
+        ((TextView) findViewById(R.id.sbISBN)).setText(isbnNumber);
 
-        String label = getResources().getString(R.string.modelLabel) + " "
-                + cursor.getCount();
-
-        modelCount.setText(label);
+        Log.i(Tag, "Grabbing the models in the book...");
 
         cursor = oData.getModelsByISBN(isbn);
 
         if (cursor == null) {
-            Log.e(TAG, "No result from model query by ISBN...");
+            Log.e(Tag, "No result from model query by ISBN...");
 
             return;
         }
 
         cursor.moveToFirst();
 
-        Log.i(TAG, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
+        Log.i(Tag, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
+
+        String modelCount = getResources().getString(R.string.sbModelCountText) + ": "
+                + cursor.getCount();
+
+        ((TextView) findViewById(R.id.sbModelCount)).setText(modelCount);
 
         String[] from = ModelTable.contentsColumns;
 

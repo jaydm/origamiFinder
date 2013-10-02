@@ -144,7 +144,7 @@ public class ModelTable {
 
     public Cursor getModelsByISBN(String isbn) {
         return mDb.query(FTS_VIRTUAL_TABLE, contentsColumns, Model.COL_ISBN + " = '" + isbn + "'",
-                null, null, null, null);
+                null, null, null, Model.COL_ON_PAGE);
     }
 
     public Cursor getModelMatches(String query) {
