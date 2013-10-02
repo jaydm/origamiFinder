@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/txtInfoBookISBN"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -13,22 +12,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="@string/info_model_name" />
-
-    <TextView
-        android:id="@+id/fmiCreatorLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/fmiModelNameLabel"
-        android:layout_below="@+id/fmiModelNameLabel"
-        android:text="@string/info_model_creator" />
-
-    <TextView
-        android:id="@+id/fmiDifficultyLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/fmiCreatorLabel"
-        android:layout_below="@+id/fmiCreatorLabel"
-        android:text="@string/info_model_difficulty" />
 
     <TextView
         android:id="@+id/fmiModelName"
@@ -58,7 +41,7 @@
         android:text="Model Difficulty" />
 
     <TextView
-        android:id="@+id/txtModelID"
+        android:id="@+id/fmiModelID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -72,5 +55,117 @@
         android:layout_alignLeft="@+id/fmiCreatorLabel"
         android:layout_alignParentBottom="true"
         android:text="TextView" />
+
+    <TextView
+        android:id="@+id/fmiModelTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fmiModelNameLabel"
+        android:layout_below="@+id/fmiModelNameLabel"
+        android:text="@string/info_model_type" />
+
+    <TextView
+        android:id="@+id/fmiCreatorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fmiModelTypeLabel"
+        android:layout_below="@+id/fmiModelTypeLabel"
+        android:text="@string/info_model_creator" />
+
+    <TextView
+        android:id="@+id/fmiModelOnPageLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fmiCreatorLabel"
+        android:layout_below="@+id/fmiCreatorLabel"
+        android:text="@string/info_model_on_page" />
+
+    <TextView
+        android:id="@+id/fmiDifficultyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fmiModelOnPageLabel"
+        android:layout_below="@+id/fmiModelOnPageLabel"
+        android:text="@string/info_model_difficulty" />
+
+    <TextView
+        android:id="@+id/fmiModelType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fmiModelName"
+        android:layout_below="@+id/fmiModelName"
+        android:text="Model Type" />
+
+    <TextView
+        android:id="@+id/fmiModelOnPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fmiModelCreator"
+        android:layout_below="@+id/fmiModelCreator"
+        android:text="On Book Page" />
+
+    <TextView
+        android:id="@+id/fmiModelShapeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fmiDifficultyLabel"
+        android:layout_below="@+id/fmiDifficultyLabel"
+        android:text="@string/info_model_paper" />
+
+    <TextView
+        android:id="@+id/fmiModelShape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fmiModelDifficulty"
+        android:layout_below="@+id/fmiModelDifficulty"
+        android:text="Paper Shape" />
+
+    <TextView
+        android:id="@+id/fmiModelSheetsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fmiModelShapeLabel"
+        android:layout_below="@+id/fmiModelShapeLabel"
+        android:text="@string/info_model_paper_pieces" />
+
+    <TextView
+        android:id="@+id/fmiModelGlueLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fmiModelSheetsLabel"
+        android:layout_below="@+id/fmiModelSheetsLabel"
+        android:text="@string/info_glue" />
+
+    <TextView
+        android:id="@+id/fmiModelSheets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fmiModelShape"
+        android:layout_below="@+id/fmiModelShape"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/fmiModelGlue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fmiModelSheets"
+        android:layout_below="@+id/fmiModelSheets"
+        android:text="Use Glue" />
+
+    <TextView
+        android:id="@+id/fmiModelCutsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fmiModelGlueLabel"
+        android:layout_below="@+id/fmiModelGlueLabel"
+        android:text="@string/info_cuts" />
+
+    <TextView
+        android:id="@+id/fmiModelCuts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fmiModelGlue"
+        android:layout_below="@+id/fmiModelGlue"
+        android:text="Cuts Required?" />
 
 </RelativeLayout>

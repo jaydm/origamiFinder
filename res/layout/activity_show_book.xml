@@ -32,7 +32,7 @@
     </EditText>
 
     <TextView
-        android:id="@+id/fmiCreatorLabel"
+        android:id="@+id/miCreatorLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sbISBNLabelText" />
@@ -44,7 +44,7 @@
         android:ems="10" />
 
     <TextView
-        android:id="@+id/sbShowModelCount"
+        android:id="@+id/miTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sbModelCountText" />

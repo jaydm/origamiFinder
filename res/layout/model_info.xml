@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/txtInfoBookISBN"
+    android:id="@+id/fmiModelOnPageLabel"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="6dip" >
 
     <TextView
-        android:id="@+id/fmiModelNameLabel"
+        android:id="@+id/miModelNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,67 +15,67 @@
         android:text="@string/info_model_name" />
 
     <TextView
-        android:id="@+id/fmiCreatorLabel"
+        android:id="@+id/miCreatorLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/fmiModelNameLabel"
-        android:layout_below="@+id/fmiModelNameLabel"
+        android:layout_alignRight="@+id/miModelNameLabel"
+        android:layout_below="@+id/miModelNameLabel"
         android:text="@string/info_model_creator" />
 
     <TextView
-        android:id="@+id/sbShowModelCount"
+        android:id="@+id/miTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/fmiCreatorLabel"
-        android:layout_below="@+id/fmiCreatorLabel"
+        android:layout_alignRight="@+id/miCreatorLabel"
+        android:layout_below="@+id/miCreatorLabel"
         android:text="@string/info_book_title" />
 
     <TextView
-        android:id="@+id/fmiDifficultyLabel"
+        android:id="@+id/miDifficultyLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/sbShowModelCount"
-        android:layout_below="@+id/sbShowModelCount"
+        android:layout_alignRight="@+id/miTitleLabel"
+        android:layout_below="@+id/miTitleLabel"
         android:text="@string/info_model_difficulty" />
 
     <TextView
-        android:id="@+id/fmiModelName"
+        android:id="@+id/miModelName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/fmiModelNameLabel"
-        android:layout_alignBottom="@+id/fmiModelNameLabel"
-        android:layout_toRightOf="@+id/fmiModelNameLabel"
+        android:layout_alignBaseline="@+id/miModelNameLabel"
+        android:layout_alignBottom="@+id/miModelNameLabel"
+        android:layout_toRightOf="@+id/miModelNameLabel"
         android:text="Model Name" />
 
     <TextView
-        android:id="@+id/fmiModelCreator"
+        android:id="@+id/miModelCreator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/fmiCreatorLabel"
-        android:layout_alignBottom="@+id/fmiCreatorLabel"
-        android:layout_alignLeft="@+id/fmiModelName"
+        android:layout_alignBaseline="@+id/miCreatorLabel"
+        android:layout_alignBottom="@+id/miCreatorLabel"
+        android:layout_alignLeft="@+id/miModelName"
         android:text="Model Creator" />
 
     <TextView
-        android:id="@+id/txtInfoBookTitle"
+        android:id="@+id/miBookTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/sbShowModelCount"
-        android:layout_alignBottom="@+id/sbShowModelCount"
-        android:layout_alignLeft="@+id/fmiModelCreator"
+        android:layout_alignBaseline="@+id/miTitleLabel"
+        android:layout_alignBottom="@+id/miTitleLabel"
+        android:layout_alignLeft="@+id/miModelCreator"
         android:text="Book Title" />
 
     <TextView
-        android:id="@+id/fmiModelDifficulty"
+        android:id="@+id/miModelDifficulty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/fmiDifficultyLabel"
-        android:layout_alignBottom="@+id/fmiDifficultyLabel"
-        android:layout_toRightOf="@+id/fmiDifficultyLabel"
+        android:layout_alignBaseline="@+id/miDifficultyLabel"
+        android:layout_alignBottom="@+id/miDifficultyLabel"
+        android:layout_toRightOf="@+id/miDifficultyLabel"
         android:text="Model Difficulty" />
 
     <TextView
-        android:id="@+id/txtModelID"
+        android:id="@+id/miModelID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

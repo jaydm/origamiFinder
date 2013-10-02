@@ -43,6 +43,24 @@ public class ModelTable {
             Model.COL_CUTS
     };
 
+    public static final String[] contentsColumns = {
+            KEY_ROWID,
+            Model.COL_MODEL_NAME,
+            Model.COL_MODEL_TYPE,
+            Model.COL_CREATOR,
+            Model.COL_ON_PAGE,
+            Model.COL_DIFFICULTY,
+            Model.COL_PAPER,
+            Model.COL_PIECES,
+            Model.COL_GLUE,
+            Model.COL_CUTS
+    };
+
+    public static final String[] bookColumns = {
+            Model.COL_BOOK_TITLE,
+            Model.COL_ISBN
+    };
+
     public static final String[] listColumns = {
             KEY_ROWID,
             Model.COL_MODEL_NAME,
@@ -98,26 +116,12 @@ public class ModelTable {
         return mCursor;
     }
 
-    public Cursor getModelMatches(String query) {
-        return getModelMatches(query, listColumns);
-    }
-
-    public Cursor getModelMatches(String query, String[] columns) {
-        String selection = Model.COL_MODEL_NAME + " MATCH ?";
-
-        String[] selectionArgs = new String[] {
-                query + "*"
-        };
-
-        return query(selection, selectionArgs, columns);
-    }
-
-    public Book getBook(String isbn) {
+    public Cursor getModel(long id) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
         builder.setTables(FTS_VIRTUAL_TABLE);
 
-        String selection = Model.COL_ISBN + " = " + isbn;
+        String selection = "_id = " + id;
 
         Cursor models = builder.query(mDatabaseOpenHelper.getReadableDatabase(), Model.allColumns,
                 selection, null, null, null, Model.COL_ON_PAGE);
@@ -130,22 +134,33 @@ public class ModelTable {
             return null;
         }
 
-        Book book = new Book();
+        return models;
+    }
 
-        book.setTitle(models.getString(models.getColumnIndex(Model.COL_BOOK_TITLE)));
-        book.setIsbn(models.getString(models.getColumnIndex(Model.COL_ISBN)));
+    public Cursor getBookByISBN(long isbn) {
+        String selection = Model.COL_ISBN + " = " + isbn;
 
-        List<Model> modelList = new ArrayList<Model>();
+        return query(selection, null, bookColumns);
+    }
 
-        while (!models.isAfterLast()) {
-            modelList.add(new Model(models));
+    public Cursor getModelsByISBN(long isbn) {
+        String selection = Model.COL_ISBN + " = " + isbn;
 
-            models.moveToNext();
-        }
+        return query(selection, null, contentsColumns);
+    }
 
-        book.setContents(modelList);
+    public Cursor getModelMatches(String query) {
+        return getModelMatches(query, listColumns);
+    }
 
-        return book;
+    public Cursor getModelMatches(String query, String[] columns) {
+        String selection = Model.COL_MODEL_NAME + " MATCH ?";
+
+        String[] selectionArgs = new String[] {
+                query + "*"
+        };
+
+        return query(selection, selectionArgs, columns);
     }
 
     private Cursor query(String selection, String[] selectionArgs, String[] columns) {

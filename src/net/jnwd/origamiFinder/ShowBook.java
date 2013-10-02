@@ -1,19 +1,23 @@
 
 package net.jnwd.origamiFinder;
 
-import net.jnwd.origamiData.Book;
+import net.jnwd.origamiData.Model;
 import net.jnwd.origamiData.ModelTable;
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class ShowBook extends Activity {
     private static final String TAG = "ShowBook";
 
     private ModelTable oData;
+    private SimpleCursorAdapter dataAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,29 +30,61 @@ public class ShowBook extends Activity {
         oData = new ModelTable(this);
         oData.open();
 
-        Book book = oData.getBook(savedInstanceState.getString("ISBN"));
-        /*
-         * ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-         * this, R.array.attribute_types, android.R.layout.simple_spinner_item);
-         * adapter
-         * .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item
-         * ); attributeType.setAdapter(adapter);
-         */
+        long isbn = Long.parseLong(savedInstanceState.getString("ISBN"));
+
+        Cursor cursor;
+
+        cursor = oData.getBookByISBN(isbn);
+
+        if (cursor == null) {
+            return;
+        }
+
+        String title = cursor.getString(cursor.getColumnIndex(Model.COL_BOOK_TITLE));
+        String isbnNumber = cursor.getString(cursor.getColumnIndex(Model.COL_ISBN));
 
         setContentView(R.layout.activity_show_book);
 
-        EditText title = (EditText) findViewById(R.id.sbTitle);
-        title.setText(book.getTitle());
+        ((EditText) findViewById(R.id.sbTitle)).setText(title);
 
-        EditText isbn = (EditText) findViewById(R.id.sbISBN);
-        isbn.setText(book.getIsbn());
+        ((EditText) findViewById(R.id.sbISBN)).setText(isbnNumber);
 
-        TextView modelCount = (TextView) findViewById(R.id.sbShowModelCount);
+        TextView modelCount = (TextView) findViewById(R.id.miTitleLabel);
 
         String label = getResources().getString(R.string.modelLabel) + " "
-                + book.getContents().size();
+                + cursor.getCount();
 
         modelCount.setText(label);
+
+        cursor = oData.getModelsByISBN(isbn);
+
+        Log.i(TAG, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
+
+        String[] from = ModelTable.listColumns;
+
+        int[] to = {
+                R.id.fmiModelID,
+                R.id.miModelName,
+                R.id.fmiModelType,
+                R.id.miModelCreator,
+                R.id.fmiModelOnPage,
+                R.id.miModelDifficulty,
+                R.id.fmiModelShape,
+                R.id.fmiModelSheets,
+                R.id.fmiModelGlue,
+                R.id.fmiModelCuts
+        };
+
+        dataAdapter = new SimpleCursorAdapter(
+                this, R.layout.full_model_info,
+                cursor,
+                from,
+                to,
+                0);
+
+        ListView listView = (ListView) findViewById(R.id.sbModelListing);
+
+        listView.setAdapter(dataAdapter);
     }
 
     @Override

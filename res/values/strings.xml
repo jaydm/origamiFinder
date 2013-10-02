@@ -28,6 +28,7 @@
     <string name="info_model_creator">Creator:</string>
     <string name="info_book_title">Book Title:</string>
     <string name="info_model_type">Model Type:</string>
+    <string name="info_model_on_page">On Page:</string>
     <string name="info_model_difficulty">Difficulty:</string>
     <string name="info_model_paper">Paper:</string>
     <string name="info_model_paper_pieces">Pieces:</string>

@@ -59,11 +59,11 @@ public class QueryModelsByName extends Activity implements OnItemClickListener {
         String[] from = ModelTable.listColumns;
 
         int[] to = {
-                R.id.txtModelID,
-                R.id.fmiModelName,
-                R.id.fmiModelCreator,
-                R.id.txtInfoBookTitle,
-                R.id.fmiModelDifficulty
+                R.id.miModelID,
+                R.id.miModelName,
+                R.id.miModelCreator,
+                R.id.miBookTitle,
+                R.id.miModelDifficulty
         };
 
         Log.i(TAG, "Layout: " + R.layout.model_info);
@@ -141,6 +141,8 @@ public class QueryModelsByName extends Activity implements OnItemClickListener {
                 .getColumnIndexOrThrow(Model.COL_MODEL_NAME));
 
         Toast.makeText(getApplicationContext(), modelName, Toast.LENGTH_SHORT).show();
+
+        cursor = oData.getModel(id);
 
         Intent intent = new Intent(this, ShowBook.class);
 
