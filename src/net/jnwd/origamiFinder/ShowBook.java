@@ -94,11 +94,11 @@ public class ShowBook extends Activity {
 
         int[] to = {
                 R.id.fmiModelID,
-                R.id.miModelName,
+                R.id.fmiModelName,
                 R.id.fmiModelType,
-                R.id.miModelCreator,
+                R.id.fmiModelCreator,
                 R.id.fmiModelOnPage,
-                R.id.miModelDifficulty,
+                R.id.fmiModelDifficulty,
                 R.id.fmiModelShape,
                 R.id.fmiModelSheets,
                 R.id.fmiModelGlue,

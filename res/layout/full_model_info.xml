@@ -142,7 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/fmiModelShape"
         android:layout_below="@+id/fmiModelShape"
-        android:text="TextView" />
+        android:text="Number of sheets" />
 
     <TextView
         android:id="@+id/fmiModelGlue"
