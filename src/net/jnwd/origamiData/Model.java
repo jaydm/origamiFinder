@@ -2,7 +2,6 @@
 package net.jnwd.origamiData;
 
 import android.database.Cursor;
-import android.os.Bundle;
 import android.util.Log;
 
 public class Model implements Comparable<Model> {
@@ -245,14 +244,6 @@ public class Model implements Comparable<Model> {
                 pieces + "~" +
                 (glue.equals("no") ? false : true) + "~" +
                 (cuts.equals("no") ? false : true);
-    }
-
-    public static Bundle toBookBundle(Cursor cursor) {
-        Bundle bookBundle = new Bundle();
-
-        bookBundle.putString("ISBN", cursor.getString(cursor.getColumnIndex(Model.COL_ISBN)));
-
-        return bookBundle;
     }
 
     private String getData(String data) {

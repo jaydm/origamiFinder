@@ -137,16 +137,14 @@ public class ModelTable {
         return models;
     }
 
-    public Cursor getBookByISBN(long isbn) {
-        String selection = Model.COL_ISBN + " = " + isbn;
-
-        return query(selection, null, bookColumns);
+    public Cursor getBookByISBN(String isbn) {
+        return mDb.query(FTS_VIRTUAL_TABLE, bookColumns, Model.COL_ISBN + " = '" + isbn + "'",
+                null, null, null, null);
     }
 
-    public Cursor getModelsByISBN(long isbn) {
-        String selection = Model.COL_ISBN + " = " + isbn;
-
-        return query(selection, null, contentsColumns);
+    public Cursor getModelsByISBN(String isbn) {
+        return mDb.query(FTS_VIRTUAL_TABLE, contentsColumns, Model.COL_ISBN + " = '" + isbn + "'",
+                null, null, null, null);
     }
 
     public Cursor getModelMatches(String query) {
@@ -164,6 +162,12 @@ public class ModelTable {
     }
 
     private Cursor query(String selection, String[] selectionArgs, String[] columns) {
+        Log.i(Tag, "Trying to use selection: " + selection);
+
+        for (String arg : selectionArgs) {
+            Log.i(Tag, "Argument: " + arg);
+        }
+
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
         builder.setTables(FTS_VIRTUAL_TABLE);

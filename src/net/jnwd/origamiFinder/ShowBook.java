@@ -4,6 +4,7 @@ package net.jnwd.origamiFinder;
 import net.jnwd.origamiData.Model;
 import net.jnwd.origamiData.ModelTable;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 public class ShowBook extends Activity {
     private static final String TAG = "ShowBook";
+
+    public static final String Extra_Message = "ISBN";
 
     private ModelTable oData;
     private SimpleCursorAdapter dataAdapter;
@@ -30,20 +33,39 @@ public class ShowBook extends Activity {
         oData = new ModelTable(this);
         oData.open();
 
-        long isbn = Long.parseLong(savedInstanceState.getString("ISBN"));
+        Intent intent = getIntent();
+
+        Log.i(TAG, "Trying to get the passed in ISBN number...");
+
+        String isbn = intent.getStringExtra(Extra_Message);
+
+        Log.i(TAG, "Got ISBN: " + isbn);
+
+        Log.i(TAG, "Trying to get book info...");
 
         Cursor cursor;
 
         cursor = oData.getBookByISBN(isbn);
 
         if (cursor == null) {
+            Log.e(TAG, "No result from book query...");
+
             return;
         }
+
+        cursor.moveToFirst();
 
         String title = cursor.getString(cursor.getColumnIndex(Model.COL_BOOK_TITLE));
         String isbnNumber = cursor.getString(cursor.getColumnIndex(Model.COL_ISBN));
 
+        Log.i(TAG, "Title: " + title);
+        Log.i(TAG, "ISBN: " + isbnNumber);
+
+        Log.i(TAG, "Switch layout...");
+
         setContentView(R.layout.activity_show_book);
+
+        Log.i(TAG, "Push the title and ISBN into the layout...");
 
         ((EditText) findViewById(R.id.sbTitle)).setText(title);
 
@@ -58,9 +80,17 @@ public class ShowBook extends Activity {
 
         cursor = oData.getModelsByISBN(isbn);
 
+        if (cursor == null) {
+            Log.e(TAG, "No result from model query by ISBN...");
+
+            return;
+        }
+
+        cursor.moveToFirst();
+
         Log.i(TAG, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
 
-        String[] from = ModelTable.listColumns;
+        String[] from = ModelTable.contentsColumns;
 
         int[] to = {
                 R.id.fmiModelID,

@@ -142,13 +142,13 @@ public class QueryModelsByName extends Activity implements OnItemClickListener {
 
         Toast.makeText(getApplicationContext(), modelName, Toast.LENGTH_SHORT).show();
 
+        // load the model row...
         cursor = oData.getModel(id);
 
         Intent intent = new Intent(this, ShowBook.class);
 
-        Bundle bookBundle = Model.toBookBundle(cursor);
-
-        intent.putExtra("BookBundle", bookBundle);
+        intent.putExtra(ShowBook.Extra_Message,
+                cursor.getString(cursor.getColumnIndex(Model.COL_ISBN)));
 
         startActivity(intent);
     }
