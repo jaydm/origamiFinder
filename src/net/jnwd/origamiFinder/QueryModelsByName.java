@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,8 +20,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 public class QueryModelsByName extends Activity implements OnItemClickListener {
-    private static final String TAG = "ModelByName";
-
     private ModelTable oData;
     private SimpleCursorAdapter dataAdapter;
 
@@ -30,31 +27,19 @@ public class QueryModelsByName extends Activity implements OnItemClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i(TAG, "Inflating the interface...");
-
         setContentView(R.layout.loading_data);
 
-        Log.i(TAG, "Creating the database reference...");
-
         oData = new ModelTable(this);
-
-        Log.i(TAG, "Opening the database...");
 
         oData.open();
 
         setContentView(R.layout.activity_query_models_by_name);
 
-        Log.i(TAG, "Initial fill of the listView...");
-
         displayListView();
     }
 
     private void displayListView() {
-        Log.i(TAG, "Getting a cursor to the full database...");
-
         Cursor cursor = oData.fetchAllModels();
-
-        Log.i(TAG, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
 
         String[] from = ModelTable.listColumns;
 
@@ -65,19 +50,6 @@ public class QueryModelsByName extends Activity implements OnItemClickListener {
                 R.id.miBookTitle,
                 R.id.miModelDifficulty
         };
-
-        Log.i(TAG, "Layout: " + R.layout.model_info);
-        Log.i(TAG, "From: ");
-
-        for (String row : from) {
-            Log.i(TAG, "row: " + row);
-        }
-
-        Log.i(TAG, "To: ");
-
-        for (int row : to) {
-            Log.i(TAG, "view: " + row);
-        }
 
         dataAdapter = new SimpleCursorAdapter(
                 this, R.layout.model_info,
@@ -127,12 +99,6 @@ public class QueryModelsByName extends Activity implements OnItemClickListener {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget
-     * .AdapterView, android.view.View, int, long)
-     */
     @Override
     public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
         Cursor cursor = (Cursor) listView.getItemAtPosition(position);

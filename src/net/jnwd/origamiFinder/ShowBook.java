@@ -7,15 +7,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class ShowBook extends Activity {
-    private static final String Tag = "ShowBook";
-
     public static final String Extra_Message = "ISBN";
 
     private ModelTable oData;
@@ -24,8 +21,6 @@ public class ShowBook extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.i(Tag, "Show loading screen...");
 
         setContentView(R.layout.loading_data);
 
@@ -41,8 +36,6 @@ public class ShowBook extends Activity {
         cursor = oData.getBookByISBN(isbn);
 
         if (cursor == null) {
-            Log.e(Tag, "No result from book query...");
-
             return;
         }
 
@@ -53,27 +46,17 @@ public class ShowBook extends Activity {
 
         setContentView(R.layout.activity_show_book);
 
-        Log.i(Tag, "Pushing the title...");
-
         ((TextView) findViewById(R.id.sbTitle)).setText(title);
 
-        Log.i(Tag, "Pushing the ISBN...");
-
         ((TextView) findViewById(R.id.sbISBN)).setText(isbnNumber);
-
-        Log.i(Tag, "Grabbing the models in the book...");
 
         cursor = oData.getModelsByISBN(isbn);
 
         if (cursor == null) {
-            Log.e(Tag, "No result from model query by ISBN...");
-
             return;
         }
 
         cursor.moveToFirst();
-
-        Log.i(Tag, "Got the cursor? " + (cursor == null ? "Null!?!?!?" : "Cursor Okay!"));
 
         String modelCount = getResources().getString(R.string.sbModelCountText) + ": "
                 + cursor.getCount();
