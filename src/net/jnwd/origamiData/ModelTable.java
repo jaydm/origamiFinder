@@ -96,7 +96,8 @@ public class ModelTable {
     }
 
     public Cursor fetchAllModels() {
-        Cursor mCursor = mDb.query(FTS_VIRTUAL_TABLE, listColumns, null, null, null, null, null);
+        Cursor mCursor = mDb.query(FTS_VIRTUAL_TABLE, listColumns, null, null, null, null,
+                Model.COL_MODEL_NAME);
 
         if (mCursor != null) {
             mCursor.moveToFirst();
