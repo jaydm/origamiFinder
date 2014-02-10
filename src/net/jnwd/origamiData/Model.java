@@ -49,10 +49,16 @@ public class Model implements Comparable<Model> {
     public long id;
     public String name;
     public String modelType;
+
+    public long creatorID;
     public String creator;
+
     public String paper;
+
+    public long sourceID;
     public String bookTitle;
     public String ISBN;
+
     public String page;
     public String pieces;
     public String glue;
